@@ -1,0 +1,20 @@
+
+$body-bg: #f8f9fa; 
+$primary: #67A961; 
+$danger: #dc3545; 
+
+.btn, .form-check-input, .form-select{
+    box-shadow: none !important;
+    color: #fff;
+  }
+  .form-control {
+    box-shadow: none !important;
+    border-style: solid;
+    border-radius: 8px;
+    border-width: 4px;
+  }
+
+
+
+
+@import '~bootstrap/scss/bootstrap';
