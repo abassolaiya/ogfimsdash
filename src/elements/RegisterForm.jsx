@@ -1,16 +1,7 @@
 import React, { useState } from "react";
-import {
-  Badge,
-  Button,
-  Card,
-  Col,
-  Container,
-  Form,
-  FormGroup,
-  Row,
-} from "react-bootstrap";
+import { Badge, Button, Card, Col, Form, Row } from "react-bootstrap";
 import { baseURL } from "../httpService";
-import "../../src/index.scss";
+// import "../../src/index.scss";
 import PageHelmet from "../component/common/Helmet";
 import Header from "../component/header/Header";
 import ScrollToTop from "react-scroll-up";
