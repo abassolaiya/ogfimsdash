@@ -231,7 +231,7 @@ const Home = () => {
     })
       .then((response) => response.json())
       .then((responseJson) => {
-        console.log("news response =>", responseJson);
+        // console.log("news response =>", responseJson);
         setNews((previousNews) => [...previousNews, ...responseJson.posts]);
         // setNews(responseJson.posts);
       })
@@ -328,7 +328,7 @@ const Home = () => {
     })
       .then((response) => response.json())
       .then((responseJson) => {
-        console.log(responseJson);
+        // console.log(responseJson);
         // setVideos((prevVideos) => [...prevVideos, ...responseJson.videos]);
         setVideos(responseJson.videos);
       })
@@ -415,7 +415,11 @@ const Home = () => {
                         <div className="row ">
                           {/* learn more button */}
                           <div className="slide-btn col-md-5">
-                            <Link className="btn-default" to="/about">
+                            <Link
+                              style={{ textDecoration: "none" }}
+                              className="btn-default"
+                              to="/about"
+                            >
                               {value.button2Text}
                             </Link>
                             {/* <a
@@ -428,6 +432,7 @@ const Home = () => {
                           {/* agro-shop-shop btn */}
                           <div className="slide-btn col-md-5">
                             <a
+                              style={{ textDecoration: "none" }}
                               className="btn-default-2 size-lg"
                               href={`${value.eshopLink}`}
                               target="_blank"
@@ -451,6 +456,7 @@ const Home = () => {
                         {news.length > 0
                           ? news.slice(0, 6).map((item, i) => (
                               <Link
+                                style={{ textDecoration: "none" }}
                                 key={i}
                                 to={{
                                   pathname: "/news-details",
@@ -521,7 +527,11 @@ const Home = () => {
               {about_excerpt}
 
               <div className="slide-btn">
-                <Link className="btn-text" to="/about">
+                <Link
+                  style={{ textDecoration: "none" }}
+                  className="btn-text"
+                  to="/about"
+                >
                   Learn More
                 </Link>
               </div>
@@ -890,6 +900,7 @@ const Home = () => {
                     <div className="im_box">
                       <div className="thumbnail">
                         <Link
+                          style={{ textDecoration: "none" }}
                           to={{
                             pathname: "/news-details",
                             state: { data: value },
@@ -907,6 +918,7 @@ const Home = () => {
                           <div className="content_heading">
                             <h4 className="title title-truncate">
                               <Link
+                                style={{ textDecoration: "none" }}
                                 to={{
                                   pathname: "/news-details",
                                   state: { data: value },
@@ -925,6 +937,7 @@ const Home = () => {
                           </div>
                         </div>
                         <Link
+                          style={{ textDecoration: "none" }}
                           className="transparent_link"
                           to={{
                             pathname: "/news-details",
@@ -937,7 +950,11 @@ const Home = () => {
                 ))
               : null}
             <div className="mt-3 mb-3 text-white text-center">
-              <Link to="/news" className="btn-default size-sm text-center ">
+              <Link
+                style={{ textDecoration: "none" }}
+                to="/news"
+                className="btn-default size-sm text-center "
+              >
                 More Stories
               </Link>
             </div>
@@ -959,10 +976,18 @@ const Home = () => {
               </p>
 
               <div className="row">
-                <a href="#" className="w-100 col-6" style={{ maxWidth: 150 }}>
+                <a
+                  style={{ textDecoration: "none", maxWidth: 150 }}
+                  href="#"
+                  className="w-100 col-6"
+                >
                   <img src="assets/images/icons/playstore.webp" />
                 </a>
-                <a href="#" className="w-100 col-6" style={{ maxWidth: 150 }}>
+                <a
+                  style={{ textDecoration: "none", maxWidth: 150 }}
+                  href="#"
+                  className="w-100 col-6"
+                >
                   <img src="assets/images/icons/appstore.webp" />
                 </a>
               </div>
@@ -1006,7 +1031,9 @@ const Home = () => {
                           <div className="inner">
                             <div className="content_heading">
                               <h4 className="title descriptionTrim">
-                                <Link to="/">{value.title}</Link>
+                                <Link style={{ textDecoration: "none" }} to="/">
+                                  {value.title}
+                                </Link>
                               </h4>
                               <br />
                               <div className="row">
@@ -1016,7 +1043,12 @@ const Home = () => {
 
                                 <div className="col-lg-4 col-md-12 col-sm-12 col-12 text-white text-center">
                                   <button className="btn-default size-sm text-center">
-                                    <Link to="">More Videos</Link>
+                                    <Link
+                                      style={{ textDecoration: "none" }}
+                                      to=""
+                                    >
+                                      More Videos
+                                    </Link>
                                   </button>
                                 </div>
                               </div>
@@ -1040,6 +1072,7 @@ const Home = () => {
                       <div className="res_box">
                         <div className="thumbnail">
                           <a
+                            style={{ textDecoration: "none" }}
                             href="https://www.iita.org/digital-tools/appdetails?app=Seed_tracker"
                             target="_blank"
                             rel="noopener noreferrer"
@@ -1063,7 +1096,9 @@ const Home = () => {
                                   whiteSpace: "nowrap",
                                 }}
                               >
-                                <Link to="/">{value.title}</Link>
+                                <Link style={{ textDecoration: "none" }} to="/">
+                                  {value.title}
+                                </Link>
                               </h4>
                               <p
                                 className="description descriptionTrimres"
@@ -1073,6 +1108,7 @@ const Home = () => {
 
                             <div className="col-lg-3 col-md-12 col-sm-12 text-white text-center">
                               <a
+                                style={{ textDecoration: "none" }}
                                 className="btn-default size-sm text-center"
                                 target="_blank"
                                 href="https://www.iita.org/digital-tools"
@@ -1094,6 +1130,7 @@ const Home = () => {
                       <div className="res_box">
                         <div className="thumbnail">
                           <Link
+                            style={{ textDecoration: "none" }}
                             to={{
                               pathname: "/publication-details",
                               state: { data: value },
@@ -1119,6 +1156,7 @@ const Home = () => {
                                 }}
                               >
                                 <Link
+                                  style={{ textDecoration: "none" }}
                                   to={{
                                     pathname: "/publication-details",
                                     state: { data: value },
@@ -1137,6 +1175,7 @@ const Home = () => {
                               <Link
                                 to="/publication"
                                 className="btn-default size-sm text-center"
+                                style={{ textDecoration: "none" }}
                               >
                                 {" "}
                                 See all{" "}

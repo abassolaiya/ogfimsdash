@@ -232,7 +232,7 @@ const Register = () => {
 
   const history = useHistory();
   const countries = require("../countries");
-  console.log(countries);
+  // console.log(countries);
 
   const submit = () => {
     if (!name) {
@@ -335,7 +335,7 @@ const Register = () => {
     fetch(`${baseURL}farmers`, { method: "POST", body, headers })
       .then((response) => response.json())
       .then((responseJson) => {
-        console.log(responseJson);
+        // console.log(responseJson);
         if (responseJson.success === true) {
           notify("success", "Success");
           history.push("/");

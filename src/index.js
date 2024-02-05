@@ -51,6 +51,7 @@ import { BrowserRouter, Switch, Route } from "react-router-dom";
 import * as serviceWorker from "./serviceWorker";
 import Register from "./elements/RegisterOld";
 import RegisterForm from "./elements/RegisterForm";
+import Videos from "./elements/Videos";
 
 class Root extends Component {
   render() {
@@ -102,11 +103,11 @@ class Root extends Component {
               path={`${process.env.PUBLIC_URL}/portfolio-details`}
               component={PortfolioDetails}
             />
-            {/* <Route
+            <Route
               exact
               path={`${process.env.PUBLIC_URL}/videos`}
               component={Videos}
-            /> */}
+            />
             <Route
               exact
               path={`${process.env.PUBLIC_URL}/news-details`}

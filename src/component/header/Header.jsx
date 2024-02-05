@@ -83,22 +83,37 @@ class Header extends Component {
             <nav className="mainmenunav d-lg-block">
               <ul className="mainmenu">
                 <li>
-                  <Link to="/">Home</Link>
+                  <Link style={{ textDecoration: "none" }} to="/">
+                    Home
+                  </Link>
                 </li>
                 <li>
-                  <Link to="/about">About</Link>
+                  <Link style={{ textDecoration: "none" }} to="/about">
+                    About
+                  </Link>
                 </li>
                 <li>
-                  <Link to="/news">Updates</Link>
+                  <Link style={{ textDecoration: "none" }} to="/news">
+                    Updates
+                  </Link>
                 </li>
                 <li className="has-droupdown">
-                  <Link to="#">Resources</Link>
+                  <Link style={{ textDecoration: "none" }} to="#">
+                    Resources
+                  </Link>
                   <ul className="submenu">
                     <li>
-                      <Link to="/publication"> Publications </Link>
+                      <Link
+                        style={{ textDecoration: "none" }}
+                        to="/publication"
+                      >
+                        {" "}
+                        Publications{" "}
+                      </Link>
                     </li>
                     <li>
                       <a
+                        style={{ textDecoration: "none" }}
                         href="https://www.iita.org/digital-tools"
                         target="_blank"
                       >
@@ -107,17 +122,22 @@ class Header extends Component {
                       </a>
                     </li>
                     <li>
-                      <Link to="/">Videos</Link>
+                      <Link style={{ textDecoration: "none" }} to="/videos">
+                        Videos
+                      </Link>
                     </li>
                   </ul>
                 </li>
                 <li>
-                  <Link to="/faq">FAQ's</Link>
+                  <Link style={{ textDecoration: "none" }} to="/faq">
+                    FAQ's
+                  </Link>
                 </li>
               </ul>
             </nav>
             <div className="slide-btn">
               <a
+                style={{ textDecoration: "none" }}
                 className="btn-default btn-border-none btn-opacity"
                 href="/contact"
               >
@@ -128,7 +148,11 @@ class Header extends Component {
             </div>
 
             <div className="slide-btn">
-              <a href="/register" className="btn-default">
+              <a
+                style={{ textDecoration: "none" }}
+                href="/register"
+                className="btn-default"
+              >
                 Register
               </a>
             </div>

@@ -560,8 +560,8 @@ const RegisterForm = () => {
 
   // handle select country
   const handleSelectCountry = (evt) => {
-    console.log("countries => ", countries);
-    console.log("states => ", states);
+    // console.log("countries => ", countries);
+    // console.log("states => ", states);
     const country = evt.target.value;
     setNationality(country);
     if (countries && country) {
@@ -581,7 +581,7 @@ const RegisterForm = () => {
     setState(state);
     if (states && state) {
       const selectedState = states.find((item) => item.name === state);
-      console.log("selectedState =>", selectedState);
+      // console.log("selectedState =>", selectedState);
       if (selectedState) {
         setLGAs(selectedState.locals);
       }
@@ -600,7 +600,7 @@ const RegisterForm = () => {
       }
     });
 
-    console.log("typeOfFarming => ", value, typeOfFarming);
+    // console.log("typeOfFarming => ", value, typeOfFarming);
   };
 
   const handleCropsBeingFarmed = (evt) => {
@@ -612,7 +612,7 @@ const RegisterForm = () => {
         return [...prevCheckedItems, value];
       }
     });
-    console.log("cropsBeingFarmed =>", cropsBeingFarmed);
+    // console.log("cropsBeingFarmed =>", cropsBeingFarmed);
   };
 
   const handleForWhichCrops = (evt) => {
@@ -624,7 +624,7 @@ const RegisterForm = () => {
         return [...prevCheckedItems, value];
       }
     });
-    console.log("forWhichCrops => ", forWhichCrops);
+    // console.log("forWhichCrops => ", forWhichCrops);
   };
 
   const handlePlantForSeedOrSellHarvestAsSeed = (evt) => {
@@ -1312,7 +1312,7 @@ const RegisterForm = () => {
       };
     }
     const user_id = uuidv4();
-    console.log(user_id);
+    // console.log(user_id);
 
     let newdata = {
       _uuid: user_id,
@@ -1407,8 +1407,8 @@ const RegisterForm = () => {
     })
       .then((res) => res.json())
       .then((result) => {
-        console.log("newdata => ", newdata);
-        console.log("result => ", result);
+        // console.log("newdata => ", newdata);
+        // console.log("result => ", result);
         if (result.success === true) {
           toast.success("user registration successul!");
           setTimeout(() => {
@@ -1439,7 +1439,7 @@ const RegisterForm = () => {
           return resp.json();
         })
         .then((result) => {
-          console.log(result.data);
+          // console.log(result.data);
           setProfileImage(result.data);
         })
         .catch((error) => {
@@ -1474,19 +1474,6 @@ const RegisterForm = () => {
         } else if (Object.keys(profileImage).length === 0) {
           toast.error("Select a valid image to continue");
         } else {
-          console.log(
-            "step 1 =>",
-            primaryCategory,
-            firstName,
-            lastName,
-            age,
-            sex,
-            educationStatus,
-            maritalstatus,
-            householdSize,
-            nin
-          );
-
           setCurrentStep(currentStep + 1);
         }
       }
@@ -2560,16 +2547,16 @@ const RegisterForm = () => {
             <Col className="body-bg ">
               {/* Title Start */}
               <Col className="mb-2 px-3">
-                <h6 className="mb-2 pb-0 display-6">{title}</h6>
+                <h6 className="mb-2 pb-0 display-6 text-center">{title}</h6>
                 <div className="text-muted font-heading text-small">
-                  {description}
+                  {/* {description} */}
                 </div>
               </Col>
 
               {/* Title End */}
 
               <Card
-                className="mb-5 standard"
+                className="mb-5 standard col-lg-6 col-md-6 col-sm-12 d-flex mx-auto"
                 style={{ borderColor: "#fff", borderRadius: "1rem" }}
               >
                 <Card.Body>

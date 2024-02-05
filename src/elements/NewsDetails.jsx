@@ -1,61 +1,78 @@
 import React, { useState } from "react";
 import PageHelmet from "../component/common/Helmet";
-import { FiClock , FiUser , FiMessageCircle , FiHeart } from "react-icons/fi";
-import { Link } from 'react-router-dom';
-import ScrollToTop from 'react-scroll-up';
+import { FiClock, FiUser, FiMessageCircle, FiHeart } from "react-icons/fi";
+import { Link } from "react-router-dom";
+import ScrollToTop from "react-scroll-up";
 import { useParams, useHistory, useLocation } from "react-router-dom";
 
 import { FiChevronUp } from "react-icons/fi";
 import Header from "../component/header/Header";
 import Footer from "../component/footer/Footer";
-import { baseURL } from '../httpService';
+import { baseURL } from "../httpService";
 
-const NewsDetails = ()=>{
+const NewsDetails = () => {
+  const location = useLocation();
+  const [data, setData] = useState(location.state?.data);
+  const newsBg = encodeURI(`${baseURL}${location.state?.data.featured_image}`);
+  return (
+    <React.Fragment>
+      <PageHelmet pageTitle="News Details" />
+      <Header
+        headertransparent="header--transparent"
+        colorblack="color--black"
+        logoname="logo.png"
+      />
 
-    const location = useLocation();
-    const [data, setData] = useState(location.state?.data);
-    const newsBg = encodeURI(`${baseURL}${location.state?.data.featured_image}`);
-    return(
-        <React.Fragment>
-            <PageHelmet pageTitle='News Details' />
-            <Header headertransparent="header--transparent" colorblack="color--black" logoname="logo.png" />
-            
-            {/* Start Breadcrump Area */}
-            <div className="rn-page-title-area pt--120 pb--190" data-black-overlay="7" style={{backgroundImage: `url(${newsBg})`, backgroundPosition: 'center', backgroundSize: 'cover', backgroundRepeat: 'no-repeat'}} >
-                <div className="container">
-                    <div className="row">
-                        <div className="col-lg-12">
-                            <div className="blog-single-page-title text-center pt--100">
-                                <h2 className="title text-white"></h2>
-                                <ul className="blog-meta d-flex justify-content-center align-items-center">
-                                    <li><FiClock />{data.createdAt}</li>
-                                    {/*<li><FiUser />Fatima Asrafi</li>
+      {/* Start Breadcrump Area */}
+      <div
+        className="rn-page-title-area pt--120 pb--190"
+        data-black-overlay="7"
+        style={{
+          backgroundImage: `url(${newsBg})`,
+          backgroundPosition: "center",
+          backgroundSize: "cover",
+          backgroundRepeat: "no-repeat",
+        }}
+      >
+        <div className="container">
+          <div className="row">
+            <div className="col-lg-12">
+              <div className="blog-single-page-title text-center pt--100">
+                <h2 className="title text-white"> {data.title}</h2>
+                <ul className="blog-meta d-flex justify-content-center align-items-center">
+                  <li>
+                    <FiClock />
+                    {data.createdAt}
+                  </li>
+                  {/*<li><FiUser />Fatima Asrafi</li>
                                     <li><FiMessageCircle />15 Comments</li>
                                     <li><FiHeart />Like</li>*/}
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                </ul>
+              </div>
             </div>
-            {/* End Breadcrump Area */}
+          </div>
+        </div>
+      </div>
+      {/* End Breadcrump Area */}
 
-            {/* Start Blog Details */}
-            <div className="rn-blog-details pt--110 pb--70 bg_color--1">
-                <div className="container">
-                    <div className="row">
-                        <div className="col-lg-12">
-                            <div className="inner-wrapper">
-                                <div className="inner" dangerouslySetInnerHTML={{__html: data.content}}>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+      {/* Start Blog Details */}
+      <div className="rn-blog-details pt--110 pb--70 bg_color--1">
+        <div className="container">
+          <div className="row">
+            <div className="col-lg-12">
+              <div className="inner-wrapper">
+                <div
+                  className="inner"
+                  dangerouslySetInnerHTML={{ __html: data.content }}
+                ></div>
+              </div>
             </div>
-            {/* End Blog Details */}
+          </div>
+        </div>
+      </div>
+      {/* End Blog Details */}
 
-            {/* Start BLog Comment Form  
+      {/* Start BLog Comment Form  
             <div className="blog-comment-form pb--120 bg_color--1">
                 <div className="container">
                     <div className="row">
@@ -98,18 +115,16 @@ const NewsDetails = ()=>{
             </div>
              End BLog Comment Form  */}
 
-            {/* Start Back To Top */}
-            <div className="backto-top">
-                <ScrollToTop showUnder={160}>
-                    <FiChevronUp />
-                </ScrollToTop>
-            </div>
-            {/* End Back To Top */}
-            
-            <Footer /> 
+      {/* Start Back To Top */}
+      <div className="backto-top">
+        <ScrollToTop showUnder={160}>
+          <FiChevronUp />
+        </ScrollToTop>
+      </div>
+      {/* End Back To Top */}
 
-        </React.Fragment>
-    )
-    
-}
+      <Footer />
+    </React.Fragment>
+  );
+};
 export default NewsDetails;

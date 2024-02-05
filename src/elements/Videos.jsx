@@ -7,12 +7,18 @@ import Header from "../component/header/Header";
 import Footer from "../component/footer/Footer";
 import { baseURL } from "../httpService";
 import { Link } from "react-router-dom";
+import ModalVideo from "react-modal-video";
 
 const Videos = () => {
   const [videos, setVideos] = useState([]);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const openModal = () => {
+    setIsOpen(!isOpen);
+  };
 
   useEffect(() => {
-    if (publications.length === 0) {
+    if (videos.length === 0) {
       getVideos();
     }
   }, []);
@@ -22,14 +28,13 @@ const Videos = () => {
       "Content-Type": "application/json",
       Accept: "application/json",
     };
-    fetch(`${baseURL}videos?limit=100&page=1&order=desc`, {
+    fetch(`${baseURL}video?limit=100&page=1&order=desc`, {
       method: "GET",
       headers,
     })
       .then((response) => response.json())
       .then((responseJson) => {
-        console.log(responseJson.videos);
-        setVideos(responseJson.videos);
+        setVideos(responseJson?.videos);
       })
       .catch((error) => {
         console.log(error);
@@ -38,7 +43,7 @@ const Videos = () => {
 
   return (
     <React.Fragment>
-      <PageHelmet pageTitle="Updates" />
+      <PageHelmet pageTitle="Videos" />
 
       <Header
         headertransparent="header--transparent"
@@ -66,63 +71,65 @@ const Videos = () => {
       {/* End Breadcrump Area */}
 
       {/* Video Area */}
-      <div
+      {/* <div
         className="col-lg-6 col-md-12 col-sm-12 col-12 mt--40"
         style={{ zIndex: 1 }}
-      >
-        {videos.length > 0
-          ? videos.map((value, i) => (
-              <div key={i}>
-                <div className="im_box">
-                  <div className="thumbnail position-relative">
-                    <img
-                      className="w-100"
-                      src={`${baseURL}${value.thumbnail}`}
-                      alt="Video thumbnail"
-                    />
-                    <ModalVideo
-                      channel="custom"
-                      isOpen={isOpen}
-                      url={
-                        value.url.startsWith("https://")
-                          ? value.url
-                          : `${baseURL}${value.url}`
-                      }
-                      onClose={() => setIsOpen(false)}
-                    />
-                    <button
-                      className="video-popup position-top-center theme-color"
-                      onClick={() => openModal()}
-                    >
-                      <span className="play-icon"></span>
-                    </button>
-                  </div>
-                  <div className="content">
-                    <div className="inner">
-                      <div className="content_heading">
-                        <h4 className="title descriptionTrim">
-                          <Link to="/">{value.title}</Link>
-                        </h4>
-                        <br />
-                        <div className="row">
-                          <p className="description descriptionTrim col-lg-8 col-md-12 col-sm-12 col-12">
-                            {value.body}
-                          </p>
-
-                          <div className="col-lg-4 col-md-12 col-sm-12 col-12 text-white text-center">
-                            <button className="btn-default size-sm text-center">
-                              <Link to="/videos">More Videos</Link>
-                            </button>
+      > */}
+      <div className="rn-blog-area ptb--120 bg_color--1">
+        <div className="container">
+          <div className="row mt--30 blog-style--2">
+            {videos.length > 0
+              ? videos.map((value, i) => (
+                  <div
+                    className="col-lg-4 col-md-6 col-sm-6 col-12 mt--30"
+                    key={i}
+                  >
+                    <div className="im_box">
+                      <div className="thumbnail position-relative">
+                        <img
+                          className="w-100"
+                          src={`${baseURL}${value.thumbnail}`}
+                          alt="Video thumbnail"
+                        />
+                        <ModalVideo
+                          channel="custom"
+                          isOpen={isOpen}
+                          url={
+                            value.url.startsWith("https://")
+                              ? value.url
+                              : `${baseURL}${value.url}`
+                          }
+                          onClose={() => setIsOpen(false)}
+                        />
+                        <button
+                          className="video-popup position-top-center theme-color"
+                          onClick={() => openModal()}
+                        >
+                          <span className="play-icon"></span>
+                        </button>
+                      </div>
+                      <div className="content">
+                        <div className="inner">
+                          <div className="content_heading">
+                            <h4 className="title descriptionTrim">
+                              <p to="">{value.title}</p>
+                            </h4>
+                            <br />
+                            <div className="row">
+                              <p className="description descriptionTrim col-lg-8 col-md-12 col-sm-12 col-12">
+                                {value.body}
+                              </p>
+                            </div>
                           </div>
                         </div>
+                        {/*<Link className="transparent_link" to="/"></Link>*/}
                       </div>
                     </div>
-                    {/*<Link className="transparent_link" to="/"></Link>*/}
                   </div>
-                </div>
-              </div>
-            ))
-          : null}
+                ))
+              : null}
+          </div>
+        </div>
       </div>
       {/* End Blog Area */}
 
