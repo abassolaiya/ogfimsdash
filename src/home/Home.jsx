@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect, Fragment, useRef } from "react";
 import ModalVideo from "react-modal-video";
 import ScrollToTop from "react-scroll-up";
 import Slider from "react-slick";
@@ -360,6 +360,19 @@ const Home = () => {
       .catch((error) => {
         console.log(error);
       });
+  };
+
+  const videoRef = useRef(null);
+
+  const handlePosterLoad = () => {
+    // Get the natural width and height of the poster image
+    const { naturalWidth, naturalHeight } = videoRef.current.poster;
+
+    // Set the width and height of the video element
+    if (naturalWidth && naturalHeight) {
+      videoRef.current.width = naturalWidth;
+      videoRef.current.height = naturalHeight;
+    }
   };
 
   useEffect(() => {
@@ -1004,7 +1017,7 @@ const Home = () => {
 
       {/* Start RESOURCES Area */}
 
-      <div className="rn-blog-area pt--120 pb--80 ">
+      <div className="rn-blog-area pt--120 pb--10 ">
         <div className="container">
           <div className="row align-items-end">
             <div className="col-lg-12">
@@ -1020,12 +1033,21 @@ const Home = () => {
               style={{ zIndex: 1 }}
             >
               {videos.length > 0
-                ? videos.map((value, i) => (
+                ? videos.slice(-1).map((value, i) => (
                     <div key={i}>
                       <div className="im_box">
-                        <video className="w-100" height={"265"} controls>
-                          <source src={`${baseURL}${value.url}`} />
-                        </video>
+                        <div>
+                          <video
+                            ref={videoRef}
+                            className="w-100"
+                            height={"h-100"}
+                            controls
+                            poster={`${baseURL}${value.thumbnail}`}
+                            onLoad={handlePosterLoad}
+                          >
+                            <source src={`${baseURL}${value.url}`} />
+                          </video>
+                        </div>
 
                         <div className="content">
                           <div className="inner">
@@ -1043,12 +1065,12 @@ const Home = () => {
 
                                 <div className="col-lg-4 col-md-12 col-sm-12 col-12 text-white text-center">
                                   <button className="btn-default size-sm text-center">
-                                    <Link
+                                    <a
                                       style={{ textDecoration: "none" }}
-                                      to=""
+                                      to="/videos"
                                     >
                                       More Videos
-                                    </Link>
+                                    </a>
                                   </button>
                                 </div>
                               </div>
@@ -1254,8 +1276,14 @@ const Home = () => {
             </div>*/}
 
       {/* Start Brand Area */}
-      <div className="rn-brand-area bg_color--5 ptb--120">
-        <div className="container">
+      <div
+        className="rn-brand-area bg_color--5 ptb--120 "
+        style={{
+          borderColor: "red",
+          borderWidth: 2,
+        }}
+      >
+        <div className="container ">
           <div className="row align-items-end">
             <div className="col-lg-12">
               <div className="section-title service-style--3">

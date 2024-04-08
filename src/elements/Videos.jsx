@@ -85,7 +85,15 @@ const Videos = () => {
                     key={i}
                   >
                     <div className="im_box">
-                      <div className="thumbnail position-relative">
+                      <video
+                        className="w-100"
+                        height={"h-100"}
+                        controls
+                        poster={`${baseURL}${value.thumbnail}`}
+                      >
+                        <source src={`${baseURL}${value.url}`} />
+                      </video>
+                      {/* <div className="thumbnail position-relative">
                         <img
                           className="w-100"
                           src={`${baseURL}${value.thumbnail}`}
@@ -94,11 +102,12 @@ const Videos = () => {
                         <ModalVideo
                           channel="custom"
                           isOpen={isOpen}
-                          url={
-                            value.url.startsWith("https://")
-                              ? value.url
-                              : `${baseURL}${value.url}`
-                          }
+                          url={`${baseURL}${value.url}`}
+                          // url={
+                          //   value.url.startsWith("https://")
+                          //     ? value.url
+                          //     : `${baseURL}${value.url}`
+                          // }
                           onClose={() => setIsOpen(false)}
                         />
                         <button
@@ -107,7 +116,7 @@ const Videos = () => {
                         >
                           <span className="play-icon"></span>
                         </button>
-                      </div>
+                      </div> */}
                       <div className="content">
                         <div className="inner">
                           <div className="content_heading">
