@@ -1047,6 +1047,15 @@ const Home = () => {
                           >
                             <source src={`${baseURL}${value.url}`} />
                           </video>
+                          {/* <iframe
+                            width="853"
+                            height="480"
+                            src={`https://www.youtube.com/embed/${value.embedId}`}
+                            frameBorder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                            title="Embedded youtube"
+                          /> */}
                         </div>
 
                         <div className="content">
@@ -1064,14 +1073,13 @@ const Home = () => {
                                 </p>
 
                                 <div className="col-lg-4 col-md-12 col-sm-12 col-12 text-white text-center">
-                                  <button className="btn-default size-sm text-center">
-                                    <a
-                                      style={{ textDecoration: "none" }}
-                                      to="/videos"
-                                    >
-                                      More Videos
-                                    </a>
-                                  </button>
+                                  <a
+                                    style={{ textDecoration: "none" }}
+                                    href="/videos"
+                                    className="btn-default size-sm text-center"
+                                  >
+                                    More Videos
+                                  </a>
                                 </div>
                               </div>
                             </div>

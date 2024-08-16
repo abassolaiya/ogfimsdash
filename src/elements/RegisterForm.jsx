@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Badge, Button, Card, Col, Form, Row } from "react-bootstrap";
 import { baseURL } from "../httpService";
-// import "../../src/index.scss";
 import PageHelmet from "../component/common/Helmet";
 import Header from "../component/header/Header";
 import ScrollToTop from "react-scroll-up";
@@ -10,7 +9,7 @@ import Footer from "../component/footer/Footer";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { countries } from "../countries";
-// import { v4 as uuidv4 } from "uuid";
+import isValidEmail from "../isValidEmail";
 const { v4: uuidv4 } = require("uuid");
 // uuidv4(); // ⇨ '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d'
 
@@ -1094,7 +1093,7 @@ const RegisterForm = () => {
         type_of_commodity: {
           food_crops: typeOfCommodity.includes("Food crops") ? "TRUE" : "FALSE",
           cash_crops: typeOfCommodity.includes("Cash crops") ? "TRUE" : "FALSE",
-          livestock: typeOfCommodity.includes("Livestock") ? "TRUE" : "FALSE",
+          livestock: typeOfCommodity.includes("livestock") ? "TRUE" : "FALSE",
           fish: typeOfCommodity.includes("Fish") ? "TRUE" : "FALSE",
           others: typeOfCommodity.includes("Others") ? "TRUE" : "FALSE",
         },
@@ -1469,8 +1468,8 @@ const RegisterForm = () => {
           toast.error("Select marital status");
         } else if (!householdSize) {
           toast.error("Input household size");
-        } else if (!nin) {
-          toast.error("Input NIN");
+        } else if (nin.length !== 11) {
+          toast.error("Input a valid NIN");
         } else if (Object.keys(profileImage).length === 0) {
           toast.error("Select a valid image to continue");
         } else {
@@ -1482,8 +1481,8 @@ const RegisterForm = () => {
       if (currentStep === 2) {
         if (!phoneNumber) {
           toast.error("Input phone number");
-        } else if (!houseNumber) {
-          toast.error("Input house number");
+        } else if (!isValidEmail(email)) {
+          toast.error("Input a valid email");
         } else if (!nationality) {
           toast.error("Select nationality");
         } else if (!state) {
@@ -1494,6 +1493,8 @@ const RegisterForm = () => {
           toast.error("Input city");
         } else if (!streetName) {
           toast.error("Input street name");
+        } else if (!houseNumber) {
+          toast.error("Input house number");
         } else {
           setCurrentStep(currentStep + 1);
         }
@@ -1602,11 +1603,13 @@ const RegisterForm = () => {
           toast.error("Select farmland ownership");
         } else if (
           primaryCategory === "farmer" &&
+          typeOfFarming.includes("Crop farming") &&
           cropsBeingFarmed.length === 0
         ) {
           toast.error("Select crops being farmed");
         } else if (
           primaryCategory === "farmer" &&
+          typeOfFarming.includes("Crop farming") &&
           cropsBeingFarmed.length === 1 &&
           cropsBeingFarmed.includes("Horticulture (specify)") &&
           !otherHorticulture
@@ -1614,6 +1617,7 @@ const RegisterForm = () => {
           toast.error("Input horticulture type");
         } else if (
           primaryCategory === "farmer" &&
+          typeOfFarming.includes("Crop farming") &&
           cropsBeingFarmed.length === 1 &&
           cropsBeingFarmed.includes("Other") &&
           !otherCropsBeingFarmed
@@ -1621,6 +1625,7 @@ const RegisterForm = () => {
           toast.error("Input other crop type");
         } else if (
           primaryCategory === "farmer" &&
+          typeOfFarming.includes("Crop farming") &&
           cropsBeingFarmed.length === 2 &&
           cropsBeingFarmed.includes("Horticulture (specify)") &&
           cropsBeingFarmed.includes("Other") &&
@@ -1628,7 +1633,11 @@ const RegisterForm = () => {
           !otherCropsBeingFarmed
         ) {
           toast.error("Input crop type");
-        } else if (primaryCategory === "farmer" && !totalFarmSizeCultivated) {
+        } else if (
+          primaryCategory === "farmer" &&
+          typeOfFarming.includes("Crop farming") &&
+          !totalFarmSizeCultivated
+        ) {
           toast.error("Input total farm size cultivated in hectares");
         } else if (
           primaryCategory === "farmer" &&
@@ -1638,12 +1647,14 @@ const RegisterForm = () => {
           toast.error("Selcet producing seed");
         } else if (
           primaryCategory === "farmer" &&
+          typeOfFarming.includes("Crop farming") &&
           producingSeed === "Yes" &&
           forWhichCrops.length === 0
         ) {
           toast.error("Select producing seed for which crops");
         } else if (
           primaryCategory === "farmer" &&
+          typeOfFarming.includes("Crop farming") &&
           producingSeed === "Yes" &&
           forWhichCrops.length === 1 &&
           forWhichCrops.includes("Horticulture (specify)") &&
@@ -1652,6 +1663,7 @@ const RegisterForm = () => {
           toast.error("Input horticulture type");
         } else if (
           primaryCategory === "farmer" &&
+          typeOfFarming.includes("Crop farming") &&
           producingSeed === "Yes" &&
           forWhichCrops.length === 1 &&
           forWhichCrops.includes("Other") &&
@@ -1660,6 +1672,7 @@ const RegisterForm = () => {
           toast.error("Input other crop type");
         } else if (
           primaryCategory === "farmer" &&
+          typeOfFarming.includes("Crop farming") &&
           producingSeed === "Yes" &&
           forWhichCrops.length === 2 &&
           forWhichCrops.includes("Horticulture (specify)") &&
@@ -1670,6 +1683,7 @@ const RegisterForm = () => {
           toast.error("Input crop type");
         } else if (
           primaryCategory === "farmer" &&
+          typeOfFarming.includes("Crop farming") &&
           producingSeed == "Yes" &&
           plantForSeedOrSellHarvestAsSeed.length === 0
         ) {
@@ -1678,12 +1692,14 @@ const RegisterForm = () => {
           );
         } else if (
           primaryCategory === "farmer" &&
+          typeOfFarming.includes("Crop farming") &&
           producingSeed === "Yes" &&
           !startSeedProduction
         ) {
           toast.error("Select when you started seed production");
         } else if (
           primaryCategory === "farmer" &&
+          typeOfFarming.includes("Crop farming") &&
           producingSeed === "Yes" &&
           sellSeedOrFreeOrBarter.length === 0
         ) {
@@ -1696,12 +1712,14 @@ const RegisterForm = () => {
           toast.error("Select do you sell seed in local markets");
         } else if (
           primaryCategory === "farmer" &&
+          typeOfFarming.includes("Crop farming") &&
           producingSeed === "Yes" &&
           !motivationForSeedProduction
         ) {
           toast.error(" What is the motivation for seed production");
         } else if (
           primaryCategory === "farmer" &&
+          typeOfFarming.includes("Crop farming") &&
           producingSeed === "Yes" &&
           !trainingToProduceSeed
         ) {
@@ -2164,7 +2182,7 @@ const RegisterForm = () => {
           ) &&
           !smallRuminantsStockCapacity
         ) {
-          toast.error("Input smallRuminants stock capacity/cycle");
+          toast.error("Input small ruminants stock capacity/cycle");
         } else if (
           primaryCategory === "farmer" &&
           typeOfFarming.includes("Livestocks") &&
@@ -2447,8 +2465,9 @@ const RegisterForm = () => {
           toast.error("Input business address");
         } else if (!businessTelNo) {
           toast.error("Input business telephone number");
-        } else if (!businessEmail) {
-          toast.error("Input business email");
+        } else if (isValidEmail(businessEmail) === false) {
+          console.log("isvaidemail ==> ", isValidEmail(businessEmail));
+          toast.error("Input a valid business email");
 
           // business category except for  farmers
         } else if (primaryCategory !== "farmer" && !businessCategory) {
@@ -2495,8 +2514,9 @@ const RegisterForm = () => {
         } else if (!levelOfInrernetProficiency) {
           toast.error("Select level of internet proficiency");
         } else {
-          alert("validated");
-          setValidated(true);
+          // alert("validated");
+          // setValidated(true);
+          handleSubmit();
         }
       }
     }
@@ -2889,14 +2909,16 @@ const RegisterForm = () => {
                             </Form.Label>
                             <Form.Control
                               type="number"
+                              maxLength={11}
+                              max={11}
                               placeholder="National Identification Number (NIN)"
                               onChange={(e) => setNIN(e.target.value)}
                               value={nin}
                             />
-                            <Form.Control.Feedback></Form.Control.Feedback>
+                            {/* <Form.Control.Feedback></Form.Control.Feedback>
                             <Form.Control.Feedback type="invalid">
                               Input NIN
-                            </Form.Control.Feedback>
+                            </Form.Control.Feedback> */}
                           </Form.Group>
                           {/* profile image */}
                           <Form.Group
@@ -2968,23 +2990,6 @@ const RegisterForm = () => {
                             </Form.Control.Feedback>
                           </Form.Group>
                           {/* Address */}
-                          {/* input house number */}
-                          <Form.Group className="mb-4" controlId="house_number">
-                            <Form.Label className="mb-2">
-                              House Number
-                            </Form.Label>
-                            <Form.Control
-                              type="number"
-                              placeholder="House Number"
-                              onChange={(e) => setHouseNumber(e.target.value)}
-                              required
-                              value={houseNumber}
-                            />
-                            <Form.Control.Feedback></Form.Control.Feedback>
-                            <Form.Control.Feedback type="invalid">
-                              Input house number
-                            </Form.Control.Feedback>
-                          </Form.Group>
 
                           {/* select nationality */}
                           <Form.Label className="mb-2">Nationality</Form.Label>
@@ -3110,6 +3115,23 @@ const RegisterForm = () => {
                             <Form.Control.Feedback></Form.Control.Feedback>
                             <Form.Control.Feedback type="invalid">
                               Input street name
+                            </Form.Control.Feedback>
+                          </Form.Group>
+                          {/* input house number */}
+                          <Form.Group className="mb-4" controlId="house_number">
+                            <Form.Label className="mb-2">
+                              House Number
+                            </Form.Label>
+                            <Form.Control
+                              type="number"
+                              placeholder="House Number"
+                              onChange={(e) => setHouseNumber(e.target.value)}
+                              required
+                              value={houseNumber}
+                            />
+                            <Form.Control.Feedback></Form.Control.Feedback>
+                            <Form.Control.Feedback type="invalid">
+                              Input house number
                             </Form.Control.Feedback>
                           </Form.Group>
                         </Form>
@@ -3762,7 +3784,7 @@ const RegisterForm = () => {
                                     <Form.Check
                                       type="radio"
                                       aria-label="Yes"
-                                      id="Yes"
+                                      id="producing_seed_yes"
                                       value={"Yes"}
                                       label="Yes"
                                       name="producing_seed"
@@ -3779,7 +3801,7 @@ const RegisterForm = () => {
                                       type="radio"
                                       aria-label="No"
                                       value={"No"}
-                                      id="No"
+                                      id="producing_seed_no"
                                       label="No"
                                       name="producing_seed"
                                       checked={producingSeed === "No"}
@@ -4075,7 +4097,7 @@ const RegisterForm = () => {
                                         <Form.Check
                                           type="radio"
                                           aria-label="Yes"
-                                          id="yes"
+                                          id="sell_in_market_yes"
                                           label="Yes"
                                           name="sell_in_market"
                                           value="Yes"
@@ -4091,7 +4113,7 @@ const RegisterForm = () => {
                                         <Form.Check
                                           type="radio"
                                           aria-label="No"
-                                          id="no"
+                                          id="sell_in_market_no"
                                           label="No"
                                           name="sell_in_market"
                                           value="No"
@@ -4134,7 +4156,7 @@ const RegisterForm = () => {
                                         <Form.Check
                                           type="radio"
                                           aria-label="Yes"
-                                          id="yes"
+                                          id="training_or_advice_yes"
                                           label="Yes"
                                           name="training_or_advice"
                                           value="Yes"
@@ -4150,7 +4172,7 @@ const RegisterForm = () => {
                                         <Form.Check
                                           type="radio"
                                           aria-label="No"
-                                          id="no"
+                                          id="training_or_advice_no"
                                           label="No"
                                           name="training_or_advice"
                                           value="No"
@@ -4252,688 +4274,164 @@ const RegisterForm = () => {
                               ) : null}
 
                               {/* farm productivity (crops) */}
-                              {/* {primaryCategory === "farming" &&
-                              typeOfFarming.includes("Crop farming") ? (
-                                <> */}
-                              {cropsBeingFarmed.includes("Cassava") ? (
-                                <>
-                                  <Form.Group className="mb-4">
-                                    <Form.Label className="mb-2">
-                                      Total Farm Size Used to Cultivate Cassava
-                                      (ha)
-                                    </Form.Label>
-                                    <Form.Control
-                                      placeholder="Total Farm Size Used to Cultivate Cassava (ha)"
-                                      type="number"
-                                      id="cassava_farmsize"
-                                      value={cassavaFarmSize}
-                                      onChange={(e) =>
-                                        setCassavaFarmSize(e.target.value)
-                                      }
-                                    />
-                                  </Form.Group>
-                                  <Form.Group className="mb-4">
-                                    <Form.Label className="mb-2">
-                                      Total Cassava Yield/ha (kg)
-                                    </Form.Label>
-                                    <Form.Control
-                                      placeholder="Total Cassava Yield/ha (kg)"
-                                      type="number"
-                                      id="cassava_yield"
-                                      value={cassavaYield}
-                                      onChange={(e) =>
-                                        setCassavaYield(e.target.value)
-                                      }
-                                    />
-                                  </Form.Group>
-                                </>
-                              ) : null}
-
-                              {/* farm productivity (crops) => yam */}
-                              {cropsBeingFarmed.includes("Yam") ? (
-                                <>
-                                  <Form.Group className="mb-4">
-                                    <Form.Label className="mb-2">
-                                      Total Farm Size Used to Cultivate Yam (ha)
-                                    </Form.Label>
-                                    <Form.Control
-                                      placeholder="Total Farm Size Used to Cultivate Yam (ha)"
-                                      type="number"
-                                      id="yam_farmsize"
-                                      value={yamFarmSize}
-                                      onChange={(e) =>
-                                        setYamFarmSize(e.target.value)
-                                      }
-                                    />
-                                  </Form.Group>
-                                  <Form.Group className="mb-4">
-                                    <Form.Label className="mb-2">
-                                      Total Yam Yield/ha (kg)
-                                    </Form.Label>
-                                    <Form.Control
-                                      placeholder="Total Yam Yield/ha (kg)"
-                                      type="number"
-                                      id="yam_yield"
-                                      value={yamYield}
-                                      onChange={(e) =>
-                                        setYamYield(e.target.value)
-                                      }
-                                    />
-                                  </Form.Group>
-                                </>
-                              ) : null}
-
-                              {/* farm productivity (crops) => cowpea */}
-                              {cropsBeingFarmed.includes("Cowpea") ? (
-                                <>
-                                  <Form.Group className="mb-4">
-                                    <Form.Label className="mb-2">
-                                      Total Farm Size Used to Cultivate Cowpea
-                                      (ha)
-                                    </Form.Label>
-                                    <Form.Control
-                                      placeholder="Total Farm Size Used to Cultivate Cowpea (ha)"
-                                      type="number"
-                                      id="cowpea_farmsize"
-                                      value={cowpeaFarmSize}
-                                      onChange={(e) =>
-                                        setCowpeaFarmSize(e.target.value)
-                                      }
-                                    />
-                                  </Form.Group>
-                                  <Form.Group className="mb-4">
-                                    <Form.Label className="mb-2">
-                                      Total Cowpea Yield/ha (kg)
-                                    </Form.Label>
-                                    <Form.Control
-                                      placeholder="Total Cowpea Yield/ha (kg)"
-                                      type="number"
-                                      id="cowpea_yield"
-                                      value={cowpeaYield}
-                                      onChange={(e) =>
-                                        setCowpeaYield(e.target.value)
-                                      }
-                                    />
-                                  </Form.Group>
-                                </>
-                              ) : null}
-
-                              {/* farm productivity (crops) => banana */}
-
-                              {cropsBeingFarmed.includes("Banana") ? (
-                                <>
-                                  <Form.Group className="mb-4">
-                                    <Form.Label className="mb-2">
-                                      Total Farm Size Used to Cultivate Banana
-                                      (ha)
-                                    </Form.Label>
-                                    <Form.Control
-                                      placeholder="Total Farm Size Used to Cultivate Banana (ha)"
-                                      type="number"
-                                      id="banana_farmsize"
-                                      value={bananaFarmSize}
-                                      onChange={(e) =>
-                                        setBananaFarmSize(e.target.value)
-                                      }
-                                    />
-                                  </Form.Group>
-                                  <Form.Group className="mb-4">
-                                    <Form.Label className="mb-2">
-                                      Total Banana Yield/ha (kg)
-                                    </Form.Label>
-                                    <Form.Control
-                                      placeholder="Total Banana Yield/ha (kg)"
-                                      type="number"
-                                      id="banana_yield"
-                                      value={bananaYield}
-                                      onChange={(e) =>
-                                        setBananaYield(e.target.value)
-                                      }
-                                    />
-                                  </Form.Group>
-                                </>
-                              ) : null}
-
-                              {/* farm productivity (crops) => plantain */}
-                              {cropsBeingFarmed.includes("Plantain") ? (
-                                <>
-                                  <Form.Group className="mb-4">
-                                    <Form.Label className="mb-2">
-                                      Total Farm Size Used to Cultivate Plantain
-                                      (ha)
-                                    </Form.Label>
-                                    <Form.Control
-                                      placeholder="Total Farm Size Used to Cultivate Plantain (ha)"
-                                      type="number"
-                                      id="plantain_farmsize"
-                                      value={plantainFarmSize}
-                                      onChange={(e) =>
-                                        setPlantainFarmSize(e.target.value)
-                                      }
-                                    />
-                                  </Form.Group>
-                                  <Form.Group className="mb-4">
-                                    <Form.Label className="mb-2">
-                                      Total Plantain Yield/ha (kg)
-                                    </Form.Label>
-                                    <Form.Control
-                                      placeholder="Total Plantain Yield/ha (kg)"
-                                      type="number"
-                                      id="plantain_yield"
-                                      value={plantainYield}
-                                      onChange={(e) =>
-                                        setPlantainYield(e.target.value)
-                                      }
-                                    />
-                                  </Form.Group>
-                                </>
-                              ) : null}
-
-                              {/* farm productivity (crops) => rice */}
-                              {cropsBeingFarmed.includes("Rice") ? (
-                                <>
-                                  <Form.Group className="mb-4">
-                                    <Form.Label className="mb-2">
-                                      Total Farm Size Used to Cultivate Rice
-                                      (ha)
-                                    </Form.Label>
-                                    <Form.Control
-                                      placeholder="Total Farm Size Used to Cultivate Rice (ha)"
-                                      type="number"
-                                      id="rice_farmsize"
-                                      value={riceFarmSize}
-                                      onChange={(e) =>
-                                        setRiceFarmSize(e.target.value)
-                                      }
-                                    />
-                                  </Form.Group>
-                                  <Form.Group className="mb-4">
-                                    <Form.Label className="mb-2">
-                                      Total Rice Yield/ha (kg)
-                                    </Form.Label>
-                                    <Form.Control
-                                      placeholder="Total Rice Yield/ha (kg)"
-                                      type="number"
-                                      id="rice_yield"
-                                      value={riceYield}
-                                      onChange={(e) =>
-                                        setRiceYield(e.target.value)
-                                      }
-                                    />
-                                  </Form.Group>
-                                </>
-                              ) : null}
-
-                              {/* farm productivity (crops) => cocoa */}
-                              {cropsBeingFarmed.includes("Cocoa") ? (
-                                <>
-                                  <Form.Group className="mb-4">
-                                    <Form.Label className="mb-2">
-                                      Total Farm Size Used to Cultivate Cocoa
-                                      (ha)
-                                    </Form.Label>
-                                    <Form.Control
-                                      placeholder="Total Farm Size Used to Cultivate Cocoa (ha)"
-                                      type="number"
-                                      id="cocoa_farmsize"
-                                      value={cocoaFarmSize}
-                                      onChange={(e) =>
-                                        setCocoaFarmSize(e.target.value)
-                                      }
-                                    />
-                                  </Form.Group>
-                                  <Form.Group className="mb-4">
-                                    <Form.Label className="mb-2">
-                                      Total Cocoa Yield/ha (kg)
-                                    </Form.Label>
-                                    <Form.Control
-                                      placeholder="Total Cocoa Yield/ha (kg)"
-                                      type="number"
-                                      id="cocoa_yield"
-                                      value={cocoaYield}
-                                      onChange={(e) =>
-                                        setCocoaYield(e.target.value)
-                                      }
-                                    />
-                                  </Form.Group>
-                                </>
-                              ) : null}
-
-                              {/* farm productivity (crops) => cashew */}
-                              {cropsBeingFarmed.includes("Cashew") ? (
-                                <>
-                                  <Form.Group className="mb-4">
-                                    <Form.Label className="mb-2">
-                                      Total Farm Size Used to Cultivate Cashew
-                                      (ha)
-                                    </Form.Label>
-                                    <Form.Control
-                                      placeholder="Total Farm Size Used to Cultivate Cashew (ha)"
-                                      type="number"
-                                      id="cashew_farmsize"
-                                      value={cashewFarmSize}
-                                      onChange={(e) =>
-                                        setCashewFarmSize(e.target.value)
-                                      }
-                                    />
-                                  </Form.Group>
-                                  <Form.Group className="mb-4">
-                                    <Form.Label className="mb-2">
-                                      Total Cashew Yield/ha (kg)
-                                    </Form.Label>
-                                    <Form.Control
-                                      placeholder="Total Cashew Yield/ha (kg)"
-                                      type="number"
-                                      id="cashew_yield"
-                                      value={cashewYield}
-                                      onChange={(e) =>
-                                        setCashewYield(e.target.value)
-                                      }
-                                    />
-                                  </Form.Group>
-                                </>
-                              ) : null}
-
-                              {/* farm productivity (crops) => oil_palm */}
-                              {cropsBeingFarmed.includes("Oil Palm") ? (
-                                <>
-                                  <Form.Group className="mb-4">
-                                    <Form.Label className="mb-2">
-                                      Total Farm Size Used to Cultivate Oil Palm
-                                      (ha)
-                                    </Form.Label>
-                                    <Form.Control
-                                      placeholder="Total Farm Size Used to Cultivate Oil Palm (ha)"
-                                      type="number"
-                                      id="oil_palm_farmsize"
-                                      value={oilPalmFarmSize}
-                                      onChange={(e) =>
-                                        setOilPalmFarmSize(e.target.value)
-                                      }
-                                    />
-                                  </Form.Group>
-                                  <Form.Group className="mb-4">
-                                    <Form.Label className="mb-2">
-                                      Total Oil Palm Yield/ha (kg)
-                                    </Form.Label>
-                                    <Form.Control
-                                      placeholder="Total Oil Palm Yield/ha (kg)"
-                                      type="number"
-                                      id="oil_palm_yield"
-                                      value={oilPalmYield}
-                                      onChange={(e) =>
-                                        setOilPalmYield(e.target.value)
-                                      }
-                                    />
-                                  </Form.Group>
-                                </>
-                              ) : null}
-
-                              {/* farm productivity (crops) => potato */}
-                              {cropsBeingFarmed.includes("Potato") ? (
-                                <>
-                                  <Form.Group className="mb-4">
-                                    <Form.Label className="mb-2">
-                                      Total Farm Size Used to Cultivate Potato
-                                      (ha)
-                                    </Form.Label>
-                                    <Form.Control
-                                      placeholder="Total Farm Size Used to Cultivate Potato (ha)"
-                                      type="number"
-                                      id="potato_farmsize"
-                                      value={potatoFarmSize}
-                                      onChange={(e) =>
-                                        setPotatoFarmSize(e.target.value)
-                                      }
-                                    />
-                                  </Form.Group>
-                                  <Form.Group className="mb-4">
-                                    <Form.Label className="mb-2">
-                                      Total Potato Yield/ha (kg)
-                                    </Form.Label>
-                                    <Form.Control
-                                      placeholder="Total Potato Yield/ha (kg)"
-                                      type="number"
-                                      id="potato_yield"
-                                      value={potatoYield}
-                                      onChange={(e) =>
-                                        setPotatoYield(e.target.value)
-                                      }
-                                    />
-                                  </Form.Group>
-                                </>
-                              ) : null}
-
-                              {/* farm productivity (crops) => sweet_potato */}
-                              {cropsBeingFarmed.includes("Sweet Potato") ? (
-                                <>
-                                  <Form.Group className="mb-4">
-                                    <Form.Label className="mb-2">
-                                      Total Farm Size Used to Cultivate Sweet
-                                      Potato (ha)
-                                    </Form.Label>
-                                    <Form.Control
-                                      placeholder="Total Farm Size Used to Cultivate Sweet Potato (ha)"
-                                      type="number"
-                                      id="sweet_potato"
-                                      value={sweetPotatoFarmSize}
-                                      onChange={(e) =>
-                                        setSweetPotatoFarmSize(e.target.value)
-                                      }
-                                    />
-                                  </Form.Group>
-                                  <Form.Group className="mb-4">
-                                    <Form.Label className="mb-2">
-                                      Total Sweet Potato Yield/ha (kg)
-                                    </Form.Label>
-                                    <Form.Control
-                                      placeholder="Total Sweet Potato Yield/ha (kg)"
-                                      type="number"
-                                      id="sweet_potato_yield"
-                                      value={sweetPotatoYield}
-                                      onChange={(e) =>
-                                        setSweetPotatoYield(e.target.value)
-                                      }
-                                    />
-                                  </Form.Group>
-                                </>
-                              ) : null}
-
-                              {/* farm productivity (crops) => wheat */}
-                              {cropsBeingFarmed.includes("Wheat") ? (
-                                <>
-                                  <Form.Group className="mb-4">
-                                    <Form.Label className="mb-2">
-                                      Total Farm Size Used to Cultivate Wheat
-                                      (ha)
-                                    </Form.Label>
-                                    <Form.Control
-                                      placeholder="Total Farm Size Used to Wheat (ha)"
-                                      type="number"
-                                      id="wheat_farmsize"
-                                      value={wheatFarmSize}
-                                      onChange={(e) =>
-                                        setWheatFarmSize(e.target.value)
-                                      }
-                                    />
-                                  </Form.Group>
-                                  <Form.Group className="mb-4">
-                                    <Form.Label className="mb-2">
-                                      Total Wheat Yield/ha (kg)
-                                    </Form.Label>
-                                    <Form.Control
-                                      placeholder="Total Wheat Yield/ha (kg)"
-                                      type="number"
-                                      id="wheat_yield"
-                                      value={wheatYield}
-                                      onChange={(e) =>
-                                        setWheatYield(e.target.value)
-                                      }
-                                    />
-                                  </Form.Group>
-                                </>
-                              ) : null}
-
-                              {/* farm productivity (crops) => Sesame */}
-                              {cropsBeingFarmed.includes("Sesame") ? (
-                                <>
-                                  <Form.Group className="mb-4">
-                                    <Form.Label className="mb-2">
-                                      Total Farm Size Used to Cultivate Sesame
-                                      (ha)
-                                    </Form.Label>
-                                    <Form.Control
-                                      placeholder="Total Farm Size Used to Cultivate Sesame (ha)"
-                                      type="number"
-                                      id="sesame_farmsize"
-                                      value={sesameFarmSize}
-                                      onChange={(e) =>
-                                        setSesameFarmSize(e.target.value)
-                                      }
-                                    />
-                                  </Form.Group>
-                                  <Form.Group className="mb-4">
-                                    <Form.Label className="mb-2">
-                                      Total Sesame Yield/ha (kg)
-                                    </Form.Label>
-                                    <Form.Control
-                                      placeholder="Total Sesame Yield/ha (kg)"
-                                      type="number"
-                                      id="sesame_yield"
-                                      value={sesameYield}
-                                      onChange={(e) =>
-                                        setSesameYield(e.target.value)
-                                      }
-                                    />
-                                  </Form.Group>
-                                </>
-                              ) : null}
-
-                              {/* farm productivity (crops) => Soya */}
-
-                              {cropsBeingFarmed.includes("Soya") ? (
-                                <>
-                                  <Form.Group className="mb-4">
-                                    <Form.Label className="mb-2">
-                                      Total Farm Size Used to Cultivate Soya
-                                      (ha)
-                                    </Form.Label>
-                                    <Form.Control
-                                      placeholder="Total Farm Size Used to Cultivate Soya (ha)"
-                                      type="number"
-                                      id="soya_farmsize"
-                                      value={soyaFarmSize}
-                                      onChange={(e) =>
-                                        setSoyaFarmSize(e.target.value)
-                                      }
-                                    />
-                                  </Form.Group>
-                                  <Form.Group className="mb-4">
-                                    <Form.Label className="mb-2">
-                                      Total Soya Yield/ha (kg)
-                                    </Form.Label>
-                                    <Form.Control
-                                      placeholder="Total Soya Yield/ha (kg)"
-                                      type="number"
-                                      id="soya_yield"
-                                      value={soyaYield}
-                                      onChange={(e) =>
-                                        setSoyaYield(e.target.value)
-                                      }
-                                    />
-                                  </Form.Group>
-                                </>
-                              ) : null}
-
-                              {/* farm productivity (crops) => maize */}
-
-                              {cropsBeingFarmed.includes("Maize") ? (
-                                <>
-                                  <Form.Group className="mb-4">
-                                    <Form.Label className="mb-2">
-                                      Total Farm Size Used to Cultivate Maize
-                                      (ha)
-                                    </Form.Label>
-                                    <Form.Control
-                                      placeholder="Total Farm Size Used to Cultivate Maize  (ha)"
-                                      type="number"
-                                      id="maize_farmsize"
-                                      value={maizeFarmSize}
-                                      onChange={(e) =>
-                                        setMaizeFarmSize(e.target.value)
-                                      }
-                                    />
-                                  </Form.Group>
-                                  <Form.Group className="mb-4">
-                                    <Form.Label className="mb-2">
-                                      Total Maize Yield/ha (kg)
-                                    </Form.Label>
-                                    <Form.Control
-                                      placeholder="Total Maize Yield/ha (kg)"
-                                      type="number"
-                                      id="maize_yield"
-                                      value={maizeYield}
-                                      onChange={(e) =>
-                                        setMaizeYield(e.target.value)
-                                      }
-                                    />
-                                  </Form.Group>
-                                </>
-                              ) : null}
-
-                              {/* farm productivity (crops) => cotton */}
-
-                              {cropsBeingFarmed.includes("Cotton") ? (
-                                <>
-                                  <Form.Group className="mb-4">
-                                    <Form.Label className="mb-2">
-                                      Total Farm Size Used to Cultivate Cotton
-                                      (ha)
-                                    </Form.Label>
-                                    <Form.Control
-                                      placeholder="Total Farm Size Used to Cultivate Cotton (ha)"
-                                      type="number"
-                                      id="cotton_farmsize"
-                                      value={cottonFarmSize}
-                                      onChange={(e) =>
-                                        setCottonFarmSize(e.target.value)
-                                      }
-                                    />
-                                  </Form.Group>
-                                  <Form.Group className="mb-4">
-                                    <Form.Label className="mb-2">
-                                      Total Cotton Yield/ha (kg)
-                                    </Form.Label>
-                                    <Form.Control
-                                      placeholder="Total Cotton Yield/ha (kg)"
-                                      type="number"
-                                      id="cotton_yield"
-                                      value={cottonYield}
-                                      onChange={(e) =>
-                                        setCottonYield(e.target.value)
-                                      }
-                                    />
-                                  </Form.Group>
-                                </>
-                              ) : null}
-
-                              {cropsBeingFarmed.includes("Other") ? (
-                                <>
-                                  <Form.Group className="mb-4">
-                                    <Form.Label className="mb-2">
-                                      Total Farm Size Used to Cultivate Other
-                                      crops
-                                    </Form.Label>
-                                    <Form.Control
-                                      placeholder="Total Farm Size Used to Cultivate Other crops (ha)"
-                                      type="number"
-                                      id="other_crop_farmsize"
-                                      value={otherCropFarmSize}
-                                      onChange={(e) =>
-                                        setOtherCropFarmSize(e.target.value)
-                                      }
-                                    />
-                                  </Form.Group>
-                                  <Form.Group className="mb-4">
-                                    <Form.Label className="mb-2">
-                                      Total Other Crop Yield/ha (kg)
-                                    </Form.Label>
-                                    <Form.Control
-                                      placeholder="Total Other Crop Yield/ha (kg)"
-                                      type="number"
-                                      id="other_crop_yield"
-                                      value={otherCropYield}
-                                      onChange={(e) =>
-                                        setOtherCropYield(e.target.value)
-                                      }
-                                    />
-                                  </Form.Group>
-                                </>
-                              ) : null}
-                              {cropsBeingFarmed.includes(
-                                "Horticulture (specify)"
-                              ) ? (
-                                <>
-                                  <Form.Group className="mb-4">
-                                    <Form.Label className="mb-2">
-                                      Total Farm Size Used to Cultivate
-                                      Horticulture Type (ha)
-                                    </Form.Label>
-                                    <Form.Control
-                                      placeholder="Total Farm Size Used to Cultivate Horticulture Type (ha)"
-                                      type="number"
-                                      id="other_horticulture_farmsize"
-                                      value={horticultureFarmSize}
-                                      onChange={(e) =>
-                                        setHorticultureFarmSize(e.target.value)
-                                      }
-                                    />
-                                  </Form.Group>
-                                  <Form.Group className="mb-4">
-                                    <Form.Label className="mb-2">
-                                      Total Horticulture Yield/ha (kg)
-                                    </Form.Label>
-                                    <Form.Control
-                                      placeholder="Total Horticulture Yield/ha (kg)"
-                                      type="number"
-                                      id="other_horticulture_yield"
-                                      value={horticultureYield}
-                                      onChange={(e) =>
-                                        setHorticultureYield(e.target.value)
-                                      }
-                                    />
-                                  </Form.Group>
-                                </>
-                              ) : null}
-                              {/* </>
-                              ) : null} */}
-
-                              {/* farm productivity (livestock) */}
-                              <>
-                                {/* poultry */}
-                                {typesOfLiveStockFarming.includes("Poultry") ? (
+                              {primaryCategory === "farmer" &&
+                                typeOfFarming.includes("Crop farming") && (
                                   <>
-                                    <Form.Group className="mb-4">
-                                      <Form.Label className="mb-2">
-                                        Type of Poultry
-                                      </Form.Label>
-                                      <Form.Check
-                                        placeholder="Broilers"
-                                        value={"Broilers"}
-                                        label="Broilers"
-                                        id="broilers"
-                                        checked={poultryType.includes(
-                                          "Broilers"
-                                        )}
-                                        onChange={handlePoultryType}
-                                      />
-                                      <Form.Check
-                                        placeholder="Layers"
-                                        value={"Layers"}
-                                        label="Layers"
-                                        id="layers"
-                                        checked={poultryType.includes("Layers")}
-                                        onChange={handlePoultryType}
-                                      />
-                                    </Form.Group>
-
-                                    {/* broiler poultry type */}
-                                    {poultryType.includes("Broilers") ? (
+                                    {cropsBeingFarmed.includes("Cassava") ? (
                                       <>
-                                        <Form.Group
-                                          className="mb-4"
-                                          controlId=""
-                                        >
+                                        <Form.Group className="mb-4">
                                           <Form.Label className="mb-2">
-                                            Poultry - Stock Capacity/Cycle
+                                            Total Farm Size Used to Cultivate
+                                            Cassava (ha)
                                           </Form.Label>
                                           <Form.Control
-                                            placeholder="Poultry - Stock Capacity/Cycle"
+                                            placeholder="Total Farm Size Used to Cultivate Cassava (ha)"
                                             type="number"
-                                            id="Poultry_stock_capacity"
-                                            value={poultryStockCapacity}
+                                            id="cassava_farmsize"
+                                            value={cassavaFarmSize}
                                             onChange={(e) =>
-                                              setPoultryStockCapacity(
+                                              setCassavaFarmSize(e.target.value)
+                                            }
+                                          />
+                                        </Form.Group>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Total Cassava Yield/ha (kg)
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Total Cassava Yield/ha (kg)"
+                                            type="number"
+                                            id="cassava_yield"
+                                            value={cassavaYield}
+                                            onChange={(e) =>
+                                              setCassavaYield(e.target.value)
+                                            }
+                                          />
+                                        </Form.Group>
+                                      </>
+                                    ) : null}
+
+                                    {/* farm productivity (crops) => yam */}
+                                    {cropsBeingFarmed.includes("Yam") ? (
+                                      <>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Total Farm Size Used to Cultivate
+                                            Yam (ha)
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Total Farm Size Used to Cultivate Yam (ha)"
+                                            type="number"
+                                            id="yam_farmsize"
+                                            value={yamFarmSize}
+                                            onChange={(e) =>
+                                              setYamFarmSize(e.target.value)
+                                            }
+                                          />
+                                        </Form.Group>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Total Yam Yield/ha (kg)
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Total Yam Yield/ha (kg)"
+                                            type="number"
+                                            id="yam_yield"
+                                            value={yamYield}
+                                            onChange={(e) =>
+                                              setYamYield(e.target.value)
+                                            }
+                                          />
+                                        </Form.Group>
+                                      </>
+                                    ) : null}
+
+                                    {/* farm productivity (crops) => cowpea */}
+                                    {cropsBeingFarmed.includes("Cowpea") ? (
+                                      <>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Total Farm Size Used to Cultivate
+                                            Cowpea (ha)
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Total Farm Size Used to Cultivate Cowpea (ha)"
+                                            type="number"
+                                            id="cowpea_farmsize"
+                                            value={cowpeaFarmSize}
+                                            onChange={(e) =>
+                                              setCowpeaFarmSize(e.target.value)
+                                            }
+                                          />
+                                        </Form.Group>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Total Cowpea Yield/ha (kg)
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Total Cowpea Yield/ha (kg)"
+                                            type="number"
+                                            id="cowpea_yield"
+                                            value={cowpeaYield}
+                                            onChange={(e) =>
+                                              setCowpeaYield(e.target.value)
+                                            }
+                                          />
+                                        </Form.Group>
+                                      </>
+                                    ) : null}
+
+                                    {/* farm productivity (crops) => banana */}
+
+                                    {cropsBeingFarmed.includes("Banana") ? (
+                                      <>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Total Farm Size Used to Cultivate
+                                            Banana (ha)
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Total Farm Size Used to Cultivate Banana (ha)"
+                                            type="number"
+                                            id="banana_farmsize"
+                                            value={bananaFarmSize}
+                                            onChange={(e) =>
+                                              setBananaFarmSize(e.target.value)
+                                            }
+                                          />
+                                        </Form.Group>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Total Banana Yield/ha (kg)
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Total Banana Yield/ha (kg)"
+                                            type="number"
+                                            id="banana_yield"
+                                            value={bananaYield}
+                                            onChange={(e) =>
+                                              setBananaYield(e.target.value)
+                                            }
+                                          />
+                                        </Form.Group>
+                                      </>
+                                    ) : null}
+
+                                    {/* farm productivity (crops) => plantain */}
+                                    {cropsBeingFarmed.includes("Plantain") ? (
+                                      <>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Total Farm Size Used to Cultivate
+                                            Plantain (ha)
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Total Farm Size Used to Cultivate Plantain (ha)"
+                                            type="number"
+                                            id="plantain_farmsize"
+                                            value={plantainFarmSize}
+                                            onChange={(e) =>
+                                              setPlantainFarmSize(
                                                 e.target.value
                                               )
                                             }
@@ -4941,15 +4439,213 @@ const RegisterForm = () => {
                                         </Form.Group>
                                         <Form.Group className="mb-4">
                                           <Form.Label className="mb-2">
-                                            Poultry - Average Mortality / Cycle
+                                            Total Plantain Yield/ha (kg)
                                           </Form.Label>
                                           <Form.Control
-                                            placeholder="Poultry - Average Mortality / Cycle"
+                                            placeholder="Total Plantain Yield/ha (kg)"
                                             type="number"
-                                            id="Poultry_average_mortality"
-                                            value={poultryAverageMortality}
+                                            id="plantain_yield"
+                                            value={plantainYield}
                                             onChange={(e) =>
-                                              setPoultryAverageMortality(
+                                              setPlantainYield(e.target.value)
+                                            }
+                                          />
+                                        </Form.Group>
+                                      </>
+                                    ) : null}
+
+                                    {/* farm productivity (crops) => rice */}
+                                    {cropsBeingFarmed.includes("Rice") ? (
+                                      <>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Total Farm Size Used to Cultivate
+                                            Rice (ha)
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Total Farm Size Used to Cultivate Rice (ha)"
+                                            type="number"
+                                            id="rice_farmsize"
+                                            value={riceFarmSize}
+                                            onChange={(e) =>
+                                              setRiceFarmSize(e.target.value)
+                                            }
+                                          />
+                                        </Form.Group>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Total Rice Yield/ha (kg)
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Total Rice Yield/ha (kg)"
+                                            type="number"
+                                            id="rice_yield"
+                                            value={riceYield}
+                                            onChange={(e) =>
+                                              setRiceYield(e.target.value)
+                                            }
+                                          />
+                                        </Form.Group>
+                                      </>
+                                    ) : null}
+
+                                    {/* farm productivity (crops) => cocoa */}
+                                    {cropsBeingFarmed.includes("Cocoa") ? (
+                                      <>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Total Farm Size Used to Cultivate
+                                            Cocoa (ha)
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Total Farm Size Used to Cultivate Cocoa (ha)"
+                                            type="number"
+                                            id="cocoa_farmsize"
+                                            value={cocoaFarmSize}
+                                            onChange={(e) =>
+                                              setCocoaFarmSize(e.target.value)
+                                            }
+                                          />
+                                        </Form.Group>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Total Cocoa Yield/ha (kg)
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Total Cocoa Yield/ha (kg)"
+                                            type="number"
+                                            id="cocoa_yield"
+                                            value={cocoaYield}
+                                            onChange={(e) =>
+                                              setCocoaYield(e.target.value)
+                                            }
+                                          />
+                                        </Form.Group>
+                                      </>
+                                    ) : null}
+
+                                    {/* farm productivity (crops) => cashew */}
+                                    {cropsBeingFarmed.includes("Cashew") ? (
+                                      <>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Total Farm Size Used to Cultivate
+                                            Cashew (ha)
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Total Farm Size Used to Cultivate Cashew (ha)"
+                                            type="number"
+                                            id="cashew_farmsize"
+                                            value={cashewFarmSize}
+                                            onChange={(e) =>
+                                              setCashewFarmSize(e.target.value)
+                                            }
+                                          />
+                                        </Form.Group>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Total Cashew Yield/ha (kg)
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Total Cashew Yield/ha (kg)"
+                                            type="number"
+                                            id="cashew_yield"
+                                            value={cashewYield}
+                                            onChange={(e) =>
+                                              setCashewYield(e.target.value)
+                                            }
+                                          />
+                                        </Form.Group>
+                                      </>
+                                    ) : null}
+
+                                    {/* farm productivity (crops) => oil_palm */}
+                                    {cropsBeingFarmed.includes("Oil Palm") ? (
+                                      <>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Total Farm Size Used to Cultivate
+                                            Oil Palm (ha)
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Total Farm Size Used to Cultivate Oil Palm (ha)"
+                                            type="number"
+                                            id="oil_palm_farmsize"
+                                            value={oilPalmFarmSize}
+                                            onChange={(e) =>
+                                              setOilPalmFarmSize(e.target.value)
+                                            }
+                                          />
+                                        </Form.Group>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Total Oil Palm Yield/ha (kg)
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Total Oil Palm Yield/ha (kg)"
+                                            type="number"
+                                            id="oil_palm_yield"
+                                            value={oilPalmYield}
+                                            onChange={(e) =>
+                                              setOilPalmYield(e.target.value)
+                                            }
+                                          />
+                                        </Form.Group>
+                                      </>
+                                    ) : null}
+
+                                    {/* farm productivity (crops) => potato */}
+                                    {cropsBeingFarmed.includes("Potato") ? (
+                                      <>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Total Farm Size Used to Cultivate
+                                            Potato (ha)
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Total Farm Size Used to Cultivate Potato (ha)"
+                                            type="number"
+                                            id="potato_farmsize"
+                                            value={potatoFarmSize}
+                                            onChange={(e) =>
+                                              setPotatoFarmSize(e.target.value)
+                                            }
+                                          />
+                                        </Form.Group>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Total Potato Yield/ha (kg)
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Total Potato Yield/ha (kg)"
+                                            type="number"
+                                            id="potato_yield"
+                                            value={potatoYield}
+                                            onChange={(e) =>
+                                              setPotatoYield(e.target.value)
+                                            }
+                                          />
+                                        </Form.Group>
+                                      </>
+                                    ) : null}
+
+                                    {/* farm productivity (crops) => sweet_potato */}
+                                    {cropsBeingFarmed.includes(
+                                      "Sweet Potato"
+                                    ) ? (
+                                      <>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Total Farm Size Used to Cultivate
+                                            Sweet Potato (ha)
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Total Farm Size Used to Cultivate Sweet Potato (ha)"
+                                            type="number"
+                                            id="sweet_potato"
+                                            value={sweetPotatoFarmSize}
+                                            onChange={(e) =>
+                                              setSweetPotatoFarmSize(
                                                 e.target.value
                                               )
                                             }
@@ -4957,32 +4653,15 @@ const RegisterForm = () => {
                                         </Form.Group>
                                         <Form.Group className="mb-4">
                                           <Form.Label className="mb-2">
-                                            Poultry - Average Harvest
-                                            Weight/Animal
+                                            Total Sweet Potato Yield/ha (kg)
                                           </Form.Label>
                                           <Form.Control
-                                            placeholder="Poultry - Average Harvest Weight/Animal)"
+                                            placeholder="Total Sweet Potato Yield/ha (kg)"
                                             type="number"
-                                            id="Poultry_average_harvest"
-                                            value={poultryAverageHarvest}
+                                            id="sweet_potato_yield"
+                                            value={sweetPotatoYield}
                                             onChange={(e) =>
-                                              setPoultryAverageHarvest(
-                                                e.target.value
-                                              )
-                                            }
-                                          />
-                                        </Form.Group>
-                                        <Form.Group className="mb-4">
-                                          <Form.Label className="mb-2">
-                                            Poultry - Total Harvest Weight
-                                          </Form.Label>
-                                          <Form.Control
-                                            placeholder="Poultry - Total Harvest Weight"
-                                            type="number"
-                                            id="Poultry_total_harvest"
-                                            value={poultryTotalHarvest}
-                                            onChange={(e) =>
-                                              setPoultryTotalHarvest(
+                                              setSweetPotatoYield(
                                                 e.target.value
                                               )
                                             }
@@ -4991,735 +4670,1139 @@ const RegisterForm = () => {
                                       </>
                                     ) : null}
 
-                                    {/* layers egg production */}
-                                    {poultryType.includes("Layers") ? (
-                                      <Form.Group controlId="" className="mb-4">
-                                        <Form.Label className="mb-2">
-                                          Poultry - Total Crates of Eggs
-                                          Produced
-                                        </Form.Label>
-                                        <Form.Control
-                                          placeholder="Poultry - Total Crates of Eggs Produced"
-                                          type="number"
-                                          id="poiltry_eggs"
-                                          value={poultryEggsProduced}
-                                          onChange={(e) =>
-                                            setPoultryEggsProduced(
-                                              e.target.value
-                                            )
-                                          }
-                                        />
-                                      </Form.Group>
+                                    {/* farm productivity (crops) => wheat */}
+                                    {cropsBeingFarmed.includes("Wheat") ? (
+                                      <>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Total Farm Size Used to Cultivate
+                                            Wheat (ha)
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Total Farm Size Used to Wheat (ha)"
+                                            type="number"
+                                            id="wheat_farmsize"
+                                            value={wheatFarmSize}
+                                            onChange={(e) =>
+                                              setWheatFarmSize(e.target.value)
+                                            }
+                                          />
+                                        </Form.Group>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Total Wheat Yield/ha (kg)
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Total Wheat Yield/ha (kg)"
+                                            type="number"
+                                            id="wheat_yield"
+                                            value={wheatYield}
+                                            onChange={(e) =>
+                                              setWheatYield(e.target.value)
+                                            }
+                                          />
+                                        </Form.Group>
+                                      </>
+                                    ) : null}
+
+                                    {/* farm productivity (crops) => Sesame */}
+                                    {cropsBeingFarmed.includes("Sesame") ? (
+                                      <>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Total Farm Size Used to Cultivate
+                                            Sesame (ha)
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Total Farm Size Used to Cultivate Sesame (ha)"
+                                            type="number"
+                                            id="sesame_farmsize"
+                                            value={sesameFarmSize}
+                                            onChange={(e) =>
+                                              setSesameFarmSize(e.target.value)
+                                            }
+                                          />
+                                        </Form.Group>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Total Sesame Yield/ha (kg)
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Total Sesame Yield/ha (kg)"
+                                            type="number"
+                                            id="sesame_yield"
+                                            value={sesameYield}
+                                            onChange={(e) =>
+                                              setSesameYield(e.target.value)
+                                            }
+                                          />
+                                        </Form.Group>
+                                      </>
+                                    ) : null}
+
+                                    {/* farm productivity (crops) => Soya */}
+
+                                    {cropsBeingFarmed.includes("Soya") ? (
+                                      <>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Total Farm Size Used to Cultivate
+                                            Soya (ha)
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Total Farm Size Used to Cultivate Soya (ha)"
+                                            type="number"
+                                            id="soya_farmsize"
+                                            value={soyaFarmSize}
+                                            onChange={(e) =>
+                                              setSoyaFarmSize(e.target.value)
+                                            }
+                                          />
+                                        </Form.Group>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Total Soya Yield/ha (kg)
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Total Soya Yield/ha (kg)"
+                                            type="number"
+                                            id="soya_yield"
+                                            value={soyaYield}
+                                            onChange={(e) =>
+                                              setSoyaYield(e.target.value)
+                                            }
+                                          />
+                                        </Form.Group>
+                                      </>
+                                    ) : null}
+
+                                    {/* farm productivity (crops) => maize */}
+
+                                    {cropsBeingFarmed.includes("Maize") ? (
+                                      <>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Total Farm Size Used to Cultivate
+                                            Maize (ha)
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Total Farm Size Used to Cultivate Maize  (ha)"
+                                            type="number"
+                                            id="maize_farmsize"
+                                            value={maizeFarmSize}
+                                            onChange={(e) =>
+                                              setMaizeFarmSize(e.target.value)
+                                            }
+                                          />
+                                        </Form.Group>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Total Maize Yield/ha (kg)
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Total Maize Yield/ha (kg)"
+                                            type="number"
+                                            id="maize_yield"
+                                            value={maizeYield}
+                                            onChange={(e) =>
+                                              setMaizeYield(e.target.value)
+                                            }
+                                          />
+                                        </Form.Group>
+                                      </>
+                                    ) : null}
+
+                                    {/* farm productivity (crops) => cotton */}
+
+                                    {cropsBeingFarmed.includes("Cotton") ? (
+                                      <>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Total Farm Size Used to Cultivate
+                                            Cotton (ha)
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Total Farm Size Used to Cultivate Cotton (ha)"
+                                            type="number"
+                                            id="cotton_farmsize"
+                                            value={cottonFarmSize}
+                                            onChange={(e) =>
+                                              setCottonFarmSize(e.target.value)
+                                            }
+                                          />
+                                        </Form.Group>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Total Cotton Yield/ha (kg)
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Total Cotton Yield/ha (kg)"
+                                            type="number"
+                                            id="cotton_yield"
+                                            value={cottonYield}
+                                            onChange={(e) =>
+                                              setCottonYield(e.target.value)
+                                            }
+                                          />
+                                        </Form.Group>
+                                      </>
+                                    ) : null}
+
+                                    {cropsBeingFarmed.includes("Other") ? (
+                                      <>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Total Farm Size Used to Cultivate
+                                            Other crops
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Total Farm Size Used to Cultivate Other crops (ha)"
+                                            type="number"
+                                            id="other_crop_farmsize"
+                                            value={otherCropFarmSize}
+                                            onChange={(e) =>
+                                              setOtherCropFarmSize(
+                                                e.target.value
+                                              )
+                                            }
+                                          />
+                                        </Form.Group>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Total Other Crop Yield/ha (kg)
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Total Other Crop Yield/ha (kg)"
+                                            type="number"
+                                            id="other_crop_yield"
+                                            value={otherCropYield}
+                                            onChange={(e) =>
+                                              setOtherCropYield(e.target.value)
+                                            }
+                                          />
+                                        </Form.Group>
+                                      </>
+                                    ) : null}
+                                    {cropsBeingFarmed.includes(
+                                      "Horticulture (specify)"
+                                    ) ? (
+                                      <>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Total Farm Size Used to Cultivate
+                                            Horticulture Type (ha)
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Total Farm Size Used to Cultivate Horticulture Type (ha)"
+                                            type="number"
+                                            id="other_horticulture_farmsize"
+                                            value={horticultureFarmSize}
+                                            onChange={(e) =>
+                                              setHorticultureFarmSize(
+                                                e.target.value
+                                              )
+                                            }
+                                          />
+                                        </Form.Group>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Total Horticulture Yield/ha (kg)
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Total Horticulture Yield/ha (kg)"
+                                            type="number"
+                                            id="other_horticulture_yield"
+                                            value={horticultureYield}
+                                            onChange={(e) =>
+                                              setHorticultureYield(
+                                                e.target.value
+                                              )
+                                            }
+                                          />
+                                        </Form.Group>
+                                      </>
                                     ) : null}
                                   </>
-                                ) : null}
+                                )}
 
-                                {/* Fishery & Aquaculture */}
-                                {typesOfLiveStockFarming.includes(
-                                  "Fishery & Aquaculture"
-                                ) ? (
-                                  <>
-                                    <Form.Group controlId="">
-                                      <Form.Label className="mb-2">
-                                        Fishery - Stock Capacity/Cycle
-                                      </Form.Label>
-                                      <Form.Control
-                                        placeholder="Fishery - Stock Capacity/Cycle"
-                                        type="number"
-                                        id="fishery_stock_capacity"
-                                        value={fisheryStockCapacity}
-                                        onChange={(e) =>
-                                          setFisheryStockCapacity(
-                                            e.target.value
-                                          )
-                                        }
-                                      />
-                                    </Form.Group>
-                                    <Form.Group className="mb-4">
-                                      <Form.Label className="mb-2">
-                                        Fishery - Average Mortality / Cycle
-                                      </Form.Label>
-                                      <Form.Control
-                                        placeholder="Fishery - Average Mortality / Cycle"
-                                        type="number"
-                                        id="fishery_average_mortality"
-                                        value={fisheryAverageMortality}
-                                        onChange={(e) =>
-                                          setFisheryAverageMortality(
-                                            e.target.value
-                                          )
-                                        }
-                                      />
-                                    </Form.Group>
-                                    <Form.Group className="mb-4">
-                                      <Form.Label className="mb-2">
-                                        Fishery - Average Harvest Weight/Animal
-                                      </Form.Label>
-                                      <Form.Control
-                                        placeholder="Fishery - Average Harvest Weight/Animal)"
-                                        type="number"
-                                        id="fishery_average_harvest"
-                                        value={fisheryAverageHarvest}
-                                        onChange={(e) =>
-                                          setFisheryAverageHarvest(
-                                            e.target.value
-                                          )
-                                        }
-                                      />
-                                    </Form.Group>
-                                    <Form.Group className="mb-4">
-                                      <Form.Label className="mb-2">
-                                        Fishery - Total Harvest Weight
-                                      </Form.Label>
-                                      <Form.Control
-                                        placeholder="Fishery - Total Harvest Weight"
-                                        type="number"
-                                        id="fishery_total_harvest"
-                                        value={fisheryTotalHarvest}
-                                        onChange={(e) =>
-                                          setFisheryTotalHarvest(e.target.value)
-                                        }
-                                      />
-                                    </Form.Group>
-                                  </>
-                                ) : null}
+                              {/* farm productivity (livestock) */}
 
-                                {/* cattle */}
-                                {typesOfLiveStockFarming.includes("Cattle") ? (
+                              {primaryCategory === "farmer" &&
+                                typeOfFarming.includes("Livestocks") && (
                                   <>
-                                    <Form.Group controlId="">
-                                      <Form.Label className="mb-2">
-                                        Cattle - Stock Capacity/Cycle
-                                      </Form.Label>
-                                      <Form.Control
-                                        placeholder="Cattle - Stock Capacity/Cycle"
-                                        type="number"
-                                        id="cattle_stock_capacity"
-                                        value={cattleStockCapacity}
-                                        onChange={(e) =>
-                                          setCattleStockCapacity(e.target.value)
-                                        }
-                                      />
-                                    </Form.Group>
-                                    <Form.Group className="mb-4">
-                                      <Form.Label className="mb-2">
-                                        Cattle - Average Mortality / Cycle
-                                      </Form.Label>
-                                      <Form.Control
-                                        placeholder="Cattle - Average Mortality / Cycle"
-                                        type="number"
-                                        id="cattle_average_mortality"
-                                        value={cattleAverageMortality}
-                                        onChange={(e) =>
-                                          setCattleAverageMortality(
-                                            e.target.value
-                                          )
-                                        }
-                                      />
-                                    </Form.Group>
-                                    <Form.Group className="mb-4">
-                                      <Form.Label className="mb-2">
-                                        Cattle - Average Harvest Weight/Animal
-                                      </Form.Label>
-                                      <Form.Control
-                                        placeholder="Cattle - Average Harvest Weight/Animal)"
-                                        type="number"
-                                        id="cattle_average_harvest"
-                                        value={cattleAverageHarvest}
-                                        onChange={(e) =>
-                                          setCattleAverageHarvest(
-                                            e.target.value
-                                          )
-                                        }
-                                      />
-                                    </Form.Group>
-                                    <Form.Group className="mb-4">
-                                      <Form.Label className="mb-2">
-                                        Cattle - Total Harvest Weight
-                                      </Form.Label>
-                                      <Form.Control
-                                        placeholder="Cattle - Total Harvest Weight"
-                                        type="number"
-                                        id="cattle_total_harvest"
-                                        value={cattleTotalHarvest}
-                                        onChange={(e) =>
-                                          setCattleTotalHarvest(e.target.value)
-                                        }
-                                      />
-                                    </Form.Group>
-                                  </>
-                                ) : null}
+                                    {/* poultry */}
+                                    {typesOfLiveStockFarming.includes(
+                                      "Poultry"
+                                    ) ? (
+                                      <>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Type of Poultry
+                                          </Form.Label>
+                                          <Form.Check
+                                            placeholder="Broilers"
+                                            value={"Broilers"}
+                                            label="Broilers"
+                                            id="broilers"
+                                            checked={poultryType.includes(
+                                              "Broilers"
+                                            )}
+                                            onChange={handlePoultryType}
+                                          />
+                                          <Form.Check
+                                            placeholder="Layers"
+                                            value={"Layers"}
+                                            label="Layers"
+                                            id="layers"
+                                            checked={poultryType.includes(
+                                              "Layers"
+                                            )}
+                                            onChange={handlePoultryType}
+                                          />
+                                        </Form.Group>
 
-                                {/* piggery */}
-                                {typesOfLiveStockFarming.includes("Piggery") ? (
-                                  <>
-                                    <Form.Group controlId="">
-                                      <Form.Label className="mb-2">
-                                        Piggery - Stock Capacity/Cycle
-                                      </Form.Label>
-                                      <Form.Control
-                                        placeholder="Piggery - Stock Capacity/Cycle"
-                                        type="number"
-                                        id="Piggery_stock_capacity"
-                                        value={piggeryStockCapacity}
-                                        onChange={(e) =>
-                                          setPiggeryStockCapacity(
-                                            e.target.value
-                                          )
-                                        }
-                                      />
-                                    </Form.Group>
-                                    <Form.Group className="mb-4">
-                                      <Form.Label className="mb-2">
-                                        Piggery - Average Mortality / Cycle
-                                      </Form.Label>
-                                      <Form.Control
-                                        placeholder="Piggery - Average Mortality / Cycle"
-                                        type="number"
-                                        id="Piggery_average_mortality"
-                                        value={piggeryAverageMortality}
-                                        onChange={(e) =>
-                                          setPiggeryAverageMortality(
-                                            e.target.value
-                                          )
-                                        }
-                                      />
-                                    </Form.Group>
-                                    <Form.Group className="mb-4">
-                                      <Form.Label className="mb-2">
-                                        Piggery - Average Harvest Weight/Animal
-                                      </Form.Label>
-                                      <Form.Control
-                                        placeholder="Piggery - Average Harvest Weight/Animal)"
-                                        type="number"
-                                        id="Piggery_average_harvest"
-                                        value={piggeryAverageHarvest}
-                                        onChange={(e) =>
-                                          setPiggeryAverageHarvest(
-                                            e.target.value
-                                          )
-                                        }
-                                      />
-                                    </Form.Group>
-                                    <Form.Group className="mb-4">
-                                      <Form.Label className="mb-2">
-                                        Piggery - Total Harvest Weight
-                                      </Form.Label>
-                                      <Form.Control
-                                        placeholder="Piggery - Total Harvest Weight"
-                                        type="number"
-                                        id="Piggery_total_harvest"
-                                        value={piggeryTotalHarvest}
-                                        onChange={(e) =>
-                                          setPiggeryTotalHarvest(e.target.value)
-                                        }
-                                      />
-                                    </Form.Group>
-                                  </>
-                                ) : null}
+                                        {/* broiler poultry type */}
+                                        {poultryType.includes("Broilers") ? (
+                                          <>
+                                            <Form.Group
+                                              className="mb-4"
+                                              controlId=""
+                                            >
+                                              <Form.Label className="mb-2">
+                                                Poultry - Stock Capacity/Cycle
+                                              </Form.Label>
+                                              <Form.Control
+                                                placeholder="Poultry - Stock Capacity/Cycle"
+                                                type="number"
+                                                id="Poultry_stock_capacity"
+                                                value={poultryStockCapacity}
+                                                onChange={(e) =>
+                                                  setPoultryStockCapacity(
+                                                    e.target.value
+                                                  )
+                                                }
+                                              />
+                                            </Form.Group>
+                                            <Form.Group className="mb-4">
+                                              <Form.Label className="mb-2">
+                                                Poultry - Average Mortality /
+                                                Cycle
+                                              </Form.Label>
+                                              <Form.Control
+                                                placeholder="Poultry - Average Mortality / Cycle"
+                                                type="number"
+                                                id="Poultry_average_mortality"
+                                                value={poultryAverageMortality}
+                                                onChange={(e) =>
+                                                  setPoultryAverageMortality(
+                                                    e.target.value
+                                                  )
+                                                }
+                                              />
+                                            </Form.Group>
+                                            <Form.Group className="mb-4">
+                                              <Form.Label className="mb-2">
+                                                Poultry - Average Harvest
+                                                Weight/Animal
+                                              </Form.Label>
+                                              <Form.Control
+                                                placeholder="Poultry - Average Harvest Weight/Animal)"
+                                                type="number"
+                                                id="Poultry_average_harvest"
+                                                value={poultryAverageHarvest}
+                                                onChange={(e) =>
+                                                  setPoultryAverageHarvest(
+                                                    e.target.value
+                                                  )
+                                                }
+                                              />
+                                            </Form.Group>
+                                            <Form.Group className="mb-4">
+                                              <Form.Label className="mb-2">
+                                                Poultry - Total Harvest Weight
+                                              </Form.Label>
+                                              <Form.Control
+                                                placeholder="Poultry - Total Harvest Weight"
+                                                type="number"
+                                                id="Poultry_total_harvest"
+                                                value={poultryTotalHarvest}
+                                                onChange={(e) =>
+                                                  setPoultryTotalHarvest(
+                                                    e.target.value
+                                                  )
+                                                }
+                                              />
+                                            </Form.Group>
+                                          </>
+                                        ) : null}
 
-                                {/* Small Ruminants (Goat, Sheep etc.) */}
-                                {typesOfLiveStockFarming.includes(
-                                  "small_ruminants"
-                                ) ? (
-                                  <>
-                                    <Form.Group controlId="">
-                                      <Form.Label className="mb-2">
-                                        Small Ruminants - Stock Capacity/Cycle
-                                      </Form.Label>
-                                      <Form.Control
-                                        placeholder="Small Ruminants - Stock Capacity/Cycle"
-                                        type="number"
-                                        id="small_ruminants_stock_capacity"
-                                        value={smallRuminantsStockCapacity}
-                                        onChange={(e) =>
-                                          setSmallRuminantsStockCapacity(
-                                            e.target.value
-                                          )
-                                        }
-                                      />
-                                    </Form.Group>
-                                    <Form.Group className="mb-4">
-                                      <Form.Label className="mb-2">
-                                        Small Ruminants - Average Mortality /
-                                        Cycle
-                                      </Form.Label>
-                                      <Form.Control
-                                        placeholder="Small Ruminants - Average Mortality / Cycle"
-                                        type="number"
-                                        id="small_ruminants_average_mortality"
-                                        value={smallRuminantsAverageMortality}
-                                        onChange={(e) =>
-                                          setSmallRuminantsAverageMortality(
-                                            e.target.value
-                                          )
-                                        }
-                                      />
-                                    </Form.Group>
-                                    <Form.Group className="mb-4">
-                                      <Form.Label className="mb-2">
-                                        Small Ruminants - Average Harvest
-                                        Weight/Animal
-                                      </Form.Label>
-                                      <Form.Control
-                                        placeholder="Small Ruminants - Average Harvest Weight/Animal)"
-                                        type="number"
-                                        id="small_ruminants_average_harvest"
-                                        value={smallRuminantsAverageHarvest}
-                                        onChange={(e) =>
-                                          setSmallRuminantsAverageHarvest(
-                                            e.target.value
-                                          )
-                                        }
-                                      />
-                                    </Form.Group>
-                                    <Form.Group className="mb-4">
-                                      <Form.Label className="mb-2">
-                                        Small Ruminants - Total Harvest Weight
-                                      </Form.Label>
-                                      <Form.Control
-                                        placeholder="Small Ruminants - Total Harvest Weight"
-                                        type="number"
-                                        id="small_ruminants_total_harvest"
-                                        value={smallRuminantsTotalHarvest}
-                                        onChange={(e) =>
-                                          setSmallRuminantsTotalHarvest(
-                                            e.target.value
-                                          )
-                                        }
-                                      />
-                                    </Form.Group>
-                                  </>
-                                ) : null}
+                                        {/* layers egg production */}
+                                        {poultryType.includes("Layers") ? (
+                                          <Form.Group
+                                            controlId=""
+                                            className="mb-4"
+                                          >
+                                            <Form.Label className="mb-2">
+                                              Poultry - Total Crates of Eggs
+                                              Produced
+                                            </Form.Label>
+                                            <Form.Control
+                                              placeholder="Poultry - Total Crates of Eggs Produced"
+                                              type="number"
+                                              id="poiltry_eggs"
+                                              value={poultryEggsProduced}
+                                              onChange={(e) =>
+                                                setPoultryEggsProduced(
+                                                  e.target.value
+                                                )
+                                              }
+                                            />
+                                          </Form.Group>
+                                        ) : null}
+                                      </>
+                                    ) : null}
 
-                                {/* rabiitry */}
-                                {typesOfLiveStockFarming.includes(
-                                  "Rabbitry"
-                                ) ? (
-                                  <>
-                                    <Form.Group controlId="">
-                                      <Form.Label className="mb-2">
-                                        Rabbitry - Stock Capacity/Cycle
-                                      </Form.Label>
-                                      <Form.Control
-                                        placeholder="Rabbitry - Stock Capacity/Cycle"
-                                        type="number"
-                                        id="Rabbitry_stock_capacity"
-                                        value={rabbitryStockCapacity}
-                                        onChange={(e) =>
-                                          setRabbitryStockCapacity(
-                                            e.target.value
-                                          )
-                                        }
-                                      />
-                                    </Form.Group>
-                                    <Form.Group className="mb-4">
-                                      <Form.Label className="mb-2">
-                                        Rabbitry - Average Mortality / Cycle
-                                      </Form.Label>
-                                      <Form.Control
-                                        placeholder="Rabbitry - Average Mortality / Cycle"
-                                        type="number"
-                                        id="Rabbitry_average_mortality"
-                                        value={rabbitryAverageMortality}
-                                        onChange={(e) =>
-                                          setRabbitryAverageMortality(
-                                            e.target.value
-                                          )
-                                        }
-                                      />
-                                    </Form.Group>
-                                    <Form.Group className="mb-4">
-                                      <Form.Label className="mb-2">
-                                        Rabbitry - Average Harvest Weight/Animal
-                                      </Form.Label>
-                                      <Form.Control
-                                        placeholder="Rabbitry - Average Harvest Weight/Animal)"
-                                        type="number"
-                                        id="Rabbitry_average_harvest"
-                                        value={rabbitryAverageHarvest}
-                                        onChange={(e) =>
-                                          setRabbitryAverageHarvest(
-                                            e.target.value
-                                          )
-                                        }
-                                      />
-                                    </Form.Group>
-                                    <Form.Group className="mb-4">
-                                      <Form.Label className="mb-2">
-                                        Rabbitry - Total Harvest Weight
-                                      </Form.Label>
-                                      <Form.Control
-                                        placeholder="Rabbitry - Total Harvest Weight"
-                                        type="number"
-                                        id="Rabbitry_total_harvest"
-                                        value={rabbitryTotalHarvest}
-                                        onChange={(e) =>
-                                          setRabbitryTotalHarvest(
-                                            e.target.value
-                                          )
-                                        }
-                                      />
-                                    </Form.Group>
-                                  </>
-                                ) : null}
+                                    {/* Fishery & Aquaculture */}
+                                    {typesOfLiveStockFarming.includes(
+                                      "Fishery & Aquaculture"
+                                    ) ? (
+                                      <>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Fishery - Stock Capacity/Cycle
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Fishery - Stock Capacity/Cycle"
+                                            type="number"
+                                            id="fishery_stock_capacity"
+                                            value={fisheryStockCapacity}
+                                            onChange={(e) =>
+                                              setFisheryStockCapacity(
+                                                e.target.value
+                                              )
+                                            }
+                                          />
+                                        </Form.Group>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Fishery - Average Mortality / Cycle
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Fishery - Average Mortality / Cycle"
+                                            type="number"
+                                            id="fishery_average_mortality"
+                                            value={fisheryAverageMortality}
+                                            onChange={(e) =>
+                                              setFisheryAverageMortality(
+                                                e.target.value
+                                              )
+                                            }
+                                          />
+                                        </Form.Group>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Fishery - Average Harvest
+                                            Weight/Animal
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Fishery - Average Harvest Weight/Animal)"
+                                            type="number"
+                                            id="fishery_average_harvest"
+                                            value={fisheryAverageHarvest}
+                                            onChange={(e) =>
+                                              setFisheryAverageHarvest(
+                                                e.target.value
+                                              )
+                                            }
+                                          />
+                                        </Form.Group>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Fishery - Total Harvest Weight
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Fishery - Total Harvest Weight"
+                                            type="number"
+                                            id="fishery_total_harvest"
+                                            value={fisheryTotalHarvest}
+                                            onChange={(e) =>
+                                              setFisheryTotalHarvest(
+                                                e.target.value
+                                              )
+                                            }
+                                          />
+                                        </Form.Group>
+                                      </>
+                                    ) : null}
 
-                                {typesOfLiveStockFarming.includes("Snailry") ? (
-                                  <>
-                                    <Form.Group controlId="">
-                                      <Form.Label className="mb-2">
-                                        Snailry - Stock Capacity/Cycle
-                                      </Form.Label>
-                                      <Form.Control
-                                        placeholder="Snailry - Stock Capacity/Cycle"
-                                        type="number"
-                                        id="Snailry_stock_capacity"
-                                        value={snailryStockCapacity}
-                                        onChange={(e) =>
-                                          setSnailryStockCapacity(
-                                            e.target.value
-                                          )
-                                        }
-                                      />
-                                    </Form.Group>
-                                    <Form.Group className="mb-4">
-                                      <Form.Label className="mb-2">
-                                        Snailry - Average Mortality / Cycle
-                                      </Form.Label>
-                                      <Form.Control
-                                        placeholder="Snailry - Average Mortality / Cycle"
-                                        type="number"
-                                        id="Snailry_average_mortality"
-                                        value={snailryAverageMortality}
-                                        onChange={(e) =>
-                                          setSnailryAverageMortality(
-                                            e.target.value
-                                          )
-                                        }
-                                      />
-                                    </Form.Group>
-                                    <Form.Group className="mb-4">
-                                      <Form.Label className="mb-2">
-                                        Snailry - Average Harvest Weight/Animal
-                                      </Form.Label>
-                                      <Form.Control
-                                        placeholder="Snailry - Average Harvest Weight/Animal)"
-                                        type="number"
-                                        id="Snailry_average_harvest"
-                                        value={snailryAverageHarvest}
-                                        onChange={(e) =>
-                                          setSnailryAverageHarvest(
-                                            e.target.value
-                                          )
-                                        }
-                                      />
-                                    </Form.Group>
-                                    <Form.Group className="mb-4">
-                                      <Form.Label className="mb-2">
-                                        Snailry - Total Harvest Weight
-                                      </Form.Label>
-                                      <Form.Control
-                                        placeholder="Snailry - Total Harvest Weight"
-                                        type="number"
-                                        id="Snailry_total_harvest"
-                                        value={snailryTotalHarvest}
-                                        onChange={(e) =>
-                                          setSnailryTotalHarvest(e.target.value)
-                                        }
-                                      />
-                                    </Form.Group>
-                                  </>
-                                ) : null}
+                                    {/* cattle */}
+                                    {typesOfLiveStockFarming.includes(
+                                      "Cattle"
+                                    ) ? (
+                                      <>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Cattle - Stock Capacity/Cycle
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Cattle - Stock Capacity/Cycle"
+                                            type="number"
+                                            id="cattle_stock_capacity"
+                                            value={cattleStockCapacity}
+                                            onChange={(e) =>
+                                              setCattleStockCapacity(
+                                                e.target.value
+                                              )
+                                            }
+                                          />
+                                        </Form.Group>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Cattle - Average Mortality / Cycle
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Cattle - Average Mortality / Cycle"
+                                            type="number"
+                                            id="cattle_average_mortality"
+                                            value={cattleAverageMortality}
+                                            onChange={(e) =>
+                                              setCattleAverageMortality(
+                                                e.target.value
+                                              )
+                                            }
+                                          />
+                                        </Form.Group>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Cattle - Average Harvest
+                                            Weight/Animal
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Cattle - Average Harvest Weight/Animal)"
+                                            type="number"
+                                            id="cattle_average_harvest"
+                                            value={cattleAverageHarvest}
+                                            onChange={(e) =>
+                                              setCattleAverageHarvest(
+                                                e.target.value
+                                              )
+                                            }
+                                          />
+                                        </Form.Group>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Cattle - Total Harvest Weight
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Cattle - Total Harvest Weight"
+                                            type="number"
+                                            id="cattle_total_harvest"
+                                            value={cattleTotalHarvest}
+                                            onChange={(e) =>
+                                              setCattleTotalHarvest(
+                                                e.target.value
+                                              )
+                                            }
+                                          />
+                                        </Form.Group>
+                                      </>
+                                    ) : null}
 
-                                {/* grass cutter farming */}
-                                {typesOfLiveStockFarming.includes(
-                                  "Grasscutter farming"
-                                ) ? (
-                                  <>
-                                    <Form.Group controlId="">
-                                      <Form.Label className="mb-2">
-                                        Grasscutter - Stock Capacity/Cycle
-                                      </Form.Label>
-                                      <Form.Control
-                                        placeholder="Grasscutter - Stock Capacity/Cycle"
-                                        type="number"
-                                        id="Grasscutter_stock_capacity"
-                                        value={grasscutterStockCapacity}
-                                        onChange={(e) =>
-                                          setGrasscutterStockCapacity(
-                                            e.target.value
-                                          )
-                                        }
-                                      />
-                                    </Form.Group>
-                                    <Form.Group className="mb-4">
-                                      <Form.Label className="mb-2">
-                                        Grasscutter - Average Mortality / Cycle
-                                      </Form.Label>
-                                      <Form.Control
-                                        placeholder="Grasscutter - Average Mortality / Cycle"
-                                        type="number"
-                                        id="Grasscutter_average_mortality"
-                                        value={grasscutterAverageMortality}
-                                        onChange={(e) =>
-                                          setGrasscutterAverageMortality(
-                                            e.target.value
-                                          )
-                                        }
-                                      />
-                                    </Form.Group>
-                                    <Form.Group className="mb-4">
-                                      <Form.Label className="mb-2">
-                                        Grasscutter - Average Harvest
-                                        Weight/Animal
-                                      </Form.Label>
-                                      <Form.Control
-                                        placeholder="Grasscutter - Average Harvest Weight/Animal)"
-                                        type="number"
-                                        id="Grasscutter_average_harvest"
-                                        value={grasscutterAverageHarvest}
-                                        onChange={(e) =>
-                                          setGrasscutterAverageHarvest(
-                                            e.target.value
-                                          )
-                                        }
-                                      />
-                                    </Form.Group>
-                                    <Form.Group className="mb-4">
-                                      <Form.Label className="mb-2">
-                                        Grasscutter - Total Harvest Weight
-                                      </Form.Label>
-                                      <Form.Control
-                                        placeholder="Grasscutter - Total Harvest Weight"
-                                        type="number"
-                                        id="Grasscutter_total_harvest"
-                                        value={grasscutterTotalHarvest}
-                                        onChange={(e) =>
-                                          setGrasscutterTotalHarvest(
-                                            e.target.value
-                                          )
-                                        }
-                                      />
-                                    </Form.Group>
-                                  </>
-                                ) : null}
+                                    {/* piggery */}
+                                    {typesOfLiveStockFarming.includes(
+                                      "Piggery"
+                                    ) ? (
+                                      <>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Piggery - Stock Capacity/Cycle
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Piggery - Stock Capacity/Cycle"
+                                            type="number"
+                                            id="Piggery_stock_capacity"
+                                            value={piggeryStockCapacity}
+                                            onChange={(e) =>
+                                              setPiggeryStockCapacity(
+                                                e.target.value
+                                              )
+                                            }
+                                          />
+                                        </Form.Group>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Piggery - Average Mortality / Cycle
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Piggery - Average Mortality / Cycle"
+                                            type="number"
+                                            id="Piggery_average_mortality"
+                                            value={piggeryAverageMortality}
+                                            onChange={(e) =>
+                                              setPiggeryAverageMortality(
+                                                e.target.value
+                                              )
+                                            }
+                                          />
+                                        </Form.Group>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Piggery - Average Harvest
+                                            Weight/Animal
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Piggery - Average Harvest Weight/Animal)"
+                                            type="number"
+                                            id="Piggery_average_harvest"
+                                            value={piggeryAverageHarvest}
+                                            onChange={(e) =>
+                                              setPiggeryAverageHarvest(
+                                                e.target.value
+                                              )
+                                            }
+                                          />
+                                        </Form.Group>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Piggery - Total Harvest Weight
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Piggery - Total Harvest Weight"
+                                            type="number"
+                                            id="Piggery_total_harvest"
+                                            value={piggeryTotalHarvest}
+                                            onChange={(e) =>
+                                              setPiggeryTotalHarvest(
+                                                e.target.value
+                                              )
+                                            }
+                                          />
+                                        </Form.Group>
+                                      </>
+                                    ) : null}
 
-                                {typesOfLiveStockFarming.includes(
-                                  "Sericulture (Silkworm production)"
-                                ) ? (
-                                  <>
-                                    <Form.Group controlId="">
-                                      <Form.Label className="mb-2">
-                                        Sericulture - Stock Capacity/Cycle
-                                      </Form.Label>
-                                      <Form.Control
-                                        placeholder="Sericulture - Stock Capacity/Cycle"
-                                        type="number"
-                                        id="Sericulture_stock_capacity"
-                                        value={sericultureStockCapacity}
-                                        onChange={(e) =>
-                                          setSericultureStockCapacity(
-                                            e.target.value
-                                          )
-                                        }
-                                      />
-                                    </Form.Group>
-                                    <Form.Group className="mb-4">
-                                      <Form.Label className="mb-2">
-                                        Sericulture - Average Mortality / Cycle
-                                      </Form.Label>
-                                      <Form.Control
-                                        placeholder="Sericulture - Average Mortality / Cycle"
-                                        type="number"
-                                        id="Sericulture_average_mortality"
-                                        value={sericultureAverageMortality}
-                                        onChange={(e) =>
-                                          setSericultureAverageMortality(
-                                            e.target.value
-                                          )
-                                        }
-                                      />
-                                    </Form.Group>
-                                    <Form.Group className="mb-4">
-                                      <Form.Label className="mb-2">
-                                        Sericulture - Average Harvest
-                                        Weight/Animal
-                                      </Form.Label>
-                                      <Form.Control
-                                        placeholder="Sericulture - Average Harvest Weight/Animal)"
-                                        type="number"
-                                        id="Sericulture_average_harvest"
-                                        value={sericultureAverageHarvest}
-                                        onChange={(e) =>
-                                          setSericultureAverageHarvest(
-                                            e.target.value
-                                          )
-                                        }
-                                      />
-                                    </Form.Group>
-                                    <Form.Group className="mb-4">
-                                      <Form.Label className="mb-2">
-                                        Sericulture - Total Harvest Weight
-                                      </Form.Label>
-                                      <Form.Control
-                                        placeholder="Sericulture - Total Harvest Weight"
-                                        type="number"
-                                        id="Sericulture_total_harvest"
-                                        value={sericultureTotalHarvest}
-                                        onChange={(e) =>
-                                          setSericultureTotalHarvest(
-                                            e.target.value
-                                          )
-                                        }
-                                      />
-                                    </Form.Group>
-                                  </>
-                                ) : null}
+                                    {/* Small Ruminants (Goat, Sheep etc.) */}
+                                    {typesOfLiveStockFarming.includes(
+                                      "Small Ruminants (Goat, Sheep etc.)"
+                                    ) ? (
+                                      <>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Small Ruminants - Stock
+                                            Capacity/Cycle
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Small Ruminants - Stock Capacity/Cycle"
+                                            type="number"
+                                            id="small_ruminants_stock_capacity"
+                                            value={smallRuminantsStockCapacity}
+                                            onChange={(e) =>
+                                              setSmallRuminantsStockCapacity(
+                                                e.target.value
+                                              )
+                                            }
+                                          />
+                                        </Form.Group>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Small Ruminants - Average Mortality
+                                            / Cycle
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Small Ruminants - Average Mortality / Cycle"
+                                            type="number"
+                                            id="small_ruminants_average_mortality"
+                                            value={
+                                              smallRuminantsAverageMortality
+                                            }
+                                            onChange={(e) =>
+                                              setSmallRuminantsAverageMortality(
+                                                e.target.value
+                                              )
+                                            }
+                                          />
+                                        </Form.Group>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Small Ruminants - Average Harvest
+                                            Weight/Animal
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Small Ruminants - Average Harvest Weight/Animal)"
+                                            type="number"
+                                            id="small_ruminants_average_harvest"
+                                            value={smallRuminantsAverageHarvest}
+                                            onChange={(e) =>
+                                              setSmallRuminantsAverageHarvest(
+                                                e.target.value
+                                              )
+                                            }
+                                          />
+                                        </Form.Group>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Small Ruminants - Total Harvest
+                                            Weight
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Small Ruminants - Total Harvest Weight"
+                                            type="number"
+                                            id="small_ruminants_total_harvest"
+                                            value={smallRuminantsTotalHarvest}
+                                            onChange={(e) =>
+                                              setSmallRuminantsTotalHarvest(
+                                                e.target.value
+                                              )
+                                            }
+                                          />
+                                        </Form.Group>
+                                      </>
+                                    ) : null}
 
-                                {typesOfLiveStockFarming.includes(
-                                  "Bee-keeping"
-                                ) ? (
-                                  <>
-                                    <Form.Group controlId="">
-                                      <Form.Label className="mb-2">
-                                        Beekeeping - Stock Capacity/Cycle
-                                      </Form.Label>
-                                      <Form.Control
-                                        placeholder="Bee-keeping - Stock Capacity/Cycle"
-                                        type="number"
-                                        id="bee_keeping_stock_capacity"
-                                        value={beekeepingStockCapacity}
-                                        onChange={(e) =>
-                                          setBeekeepingStockCapacity(
-                                            e.target.value
-                                          )
-                                        }
-                                      />
-                                    </Form.Group>
-                                    <Form.Group className="mb-4">
-                                      <Form.Label className="mb-2">
-                                        Bee-keeping - Average Mortality / Cycle
-                                      </Form.Label>
-                                      <Form.Control
-                                        placeholder="Bee-keeping - Average Mortality / Cycle"
-                                        type="number"
-                                        id="bee_keeping_average_mortality"
-                                        value={beekeepingAverageMortality}
-                                        onChange={(e) =>
-                                          setBeekeepingAverageMortality(
-                                            e.target.value
-                                          )
-                                        }
-                                      />
-                                    </Form.Group>
-                                    <Form.Group className="mb-4">
-                                      <Form.Label className="mb-2">
-                                        Bee-keeping - Average Harvest
-                                        Weight/Animal
-                                      </Form.Label>
-                                      <Form.Control
-                                        placeholder="Bee-keeping - Average Harvest Weight/Animal)"
-                                        type="number"
-                                        id="bee_keeping_average_harvest"
-                                        value={beekeepingAverageHarvest}
-                                        onChange={(e) =>
-                                          setBeekeepingAverageHarvest(
-                                            e.target.value
-                                          )
-                                        }
-                                      />
-                                    </Form.Group>
-                                    <Form.Group className="mb-4">
-                                      <Form.Label className="mb-2">
-                                        Bee-keeping - Total Harvest Weight
-                                      </Form.Label>
-                                      <Form.Control
-                                        placeholder="Bee-keeping - Total Harvest Weight"
-                                        type="number"
-                                        id="bee_keeping_total_harvest"
-                                        value={beekeepingTotalHarvest}
-                                        onChange={(e) =>
-                                          setBeekeepingTotalHarvest(
-                                            e.target.value
-                                          )
-                                        }
-                                      />
-                                    </Form.Group>
-                                  </>
-                                ) : null}
+                                    {/* rabiitry */}
+                                    {typesOfLiveStockFarming.includes(
+                                      "Rabbitry"
+                                    ) ? (
+                                      <>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Rabbitry - Stock Capacity/Cycle
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Rabbitry - Stock Capacity/Cycle"
+                                            type="number"
+                                            id="Rabbitry_stock_capacity"
+                                            value={rabbitryStockCapacity}
+                                            onChange={(e) =>
+                                              setRabbitryStockCapacity(
+                                                e.target.value
+                                              )
+                                            }
+                                          />
+                                        </Form.Group>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Rabbitry - Average Mortality / Cycle
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Rabbitry - Average Mortality / Cycle"
+                                            type="number"
+                                            id="Rabbitry_average_mortality"
+                                            value={rabbitryAverageMortality}
+                                            onChange={(e) =>
+                                              setRabbitryAverageMortality(
+                                                e.target.value
+                                              )
+                                            }
+                                          />
+                                        </Form.Group>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Rabbitry - Average Harvest
+                                            Weight/Animal
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Rabbitry - Average Harvest Weight/Animal)"
+                                            type="number"
+                                            id="Rabbitry_average_harvest"
+                                            value={rabbitryAverageHarvest}
+                                            onChange={(e) =>
+                                              setRabbitryAverageHarvest(
+                                                e.target.value
+                                              )
+                                            }
+                                          />
+                                        </Form.Group>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Rabbitry - Total Harvest Weight
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Rabbitry - Total Harvest Weight"
+                                            type="number"
+                                            id="Rabbitry_total_harvest"
+                                            value={rabbitryTotalHarvest}
+                                            onChange={(e) =>
+                                              setRabbitryTotalHarvest(
+                                                e.target.value
+                                              )
+                                            }
+                                          />
+                                        </Form.Group>
+                                      </>
+                                    ) : null}
 
-                                {/* other type of livestock farming */}
-                                {typesOfLiveStockFarming.includes("Other") ? (
-                                  <>
-                                    <Form.Group controlId="">
-                                      <Form.Label className="mb-2">
-                                        Other Livestock - Stock Capacity/Cycle
-                                      </Form.Label>
-                                      <Form.Control
-                                        placeholder="Other Livestock - Stock Capacity/Cycle"
-                                        type="number"
-                                        id="bee_keeping_stock_capacity"
-                                        value={otherLivestockStockCapacity}
-                                        onChange={(e) =>
-                                          setOtherLivestockStockCapacity(
-                                            e.target.value
-                                          )
-                                        }
-                                      />
-                                    </Form.Group>
-                                    <Form.Group className="mb-4">
-                                      <Form.Label className="mb-2">
-                                        Other Livestock - Average Mortality /
-                                        Cycle
-                                      </Form.Label>
-                                      <Form.Control
-                                        placeholder="Other Livestock - Average Mortality / Cycle"
-                                        type="number"
-                                        id="other_livestock_average_mortality"
-                                        value={otherLivestockAverageMortality}
-                                        onChange={(e) =>
-                                          setOtherLivestockAverageMortality(
-                                            e.target.value
-                                          )
-                                        }
-                                      />
-                                    </Form.Group>
-                                    <Form.Group className="mb-4">
-                                      <Form.Label className="mb-2">
-                                        Other Livestock - Average Harvest
-                                        Weight/Animal
-                                      </Form.Label>
-                                      <Form.Control
-                                        placeholder="Other Livestock - Average Harvest Weight/Animal)"
-                                        type="number"
-                                        id="other_livestock_average_harvest"
-                                        value={otherLivestockAverageHarvest}
-                                        onChange={(e) =>
-                                          setOtherLivestockAverageHarvest(
-                                            e.target.value
-                                          )
-                                        }
-                                      />
-                                    </Form.Group>
-                                    <Form.Group className="mb-4">
-                                      <Form.Label className="mb-2">
-                                        Other Livestock - Total Harvest Weight
-                                      </Form.Label>
-                                      <Form.Control
-                                        placeholder="Other Livestock - Total Harvest Weight"
-                                        type="number"
-                                        id="other_livestock_total_harvest"
-                                        value={otherLivestockTotalHarvest}
-                                        onChange={(e) =>
-                                          setOtherLivestockTotalHarvest(
-                                            e.target.value
-                                          )
-                                        }
-                                      />
-                                    </Form.Group>
+                                    {typesOfLiveStockFarming.includes(
+                                      "Snailry"
+                                    ) ? (
+                                      <>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Snailry - Stock Capacity/Cycle
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Snailry - Stock Capacity/Cycle"
+                                            type="number"
+                                            id="Snailry_stock_capacity"
+                                            value={snailryStockCapacity}
+                                            onChange={(e) =>
+                                              setSnailryStockCapacity(
+                                                e.target.value
+                                              )
+                                            }
+                                          />
+                                        </Form.Group>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Snailry - Average Mortality / Cycle
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Snailry - Average Mortality / Cycle"
+                                            type="number"
+                                            id="Snailry_average_mortality"
+                                            value={snailryAverageMortality}
+                                            onChange={(e) =>
+                                              setSnailryAverageMortality(
+                                                e.target.value
+                                              )
+                                            }
+                                          />
+                                        </Form.Group>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Snailry - Average Harvest
+                                            Weight/Animal
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Snailry - Average Harvest Weight/Animal)"
+                                            type="number"
+                                            id="Snailry_average_harvest"
+                                            value={snailryAverageHarvest}
+                                            onChange={(e) =>
+                                              setSnailryAverageHarvest(
+                                                e.target.value
+                                              )
+                                            }
+                                          />
+                                        </Form.Group>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Snailry - Total Harvest Weight
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Snailry - Total Harvest Weight"
+                                            type="number"
+                                            id="Snailry_total_harvest"
+                                            value={snailryTotalHarvest}
+                                            onChange={(e) =>
+                                              setSnailryTotalHarvest(
+                                                e.target.value
+                                              )
+                                            }
+                                          />
+                                        </Form.Group>
+                                      </>
+                                    ) : null}
+
+                                    {/* grass cutter farming */}
+                                    {typesOfLiveStockFarming.includes(
+                                      "Grasscutter farming"
+                                    ) ? (
+                                      <>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Grasscutter - Stock Capacity/Cycle
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Grasscutter - Stock Capacity/Cycle"
+                                            type="number"
+                                            id="Grasscutter_stock_capacity"
+                                            value={grasscutterStockCapacity}
+                                            onChange={(e) =>
+                                              setGrasscutterStockCapacity(
+                                                e.target.value
+                                              )
+                                            }
+                                          />
+                                        </Form.Group>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Grasscutter - Average Mortality /
+                                            Cycle
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Grasscutter - Average Mortality / Cycle"
+                                            type="number"
+                                            id="Grasscutter_average_mortality"
+                                            value={grasscutterAverageMortality}
+                                            onChange={(e) =>
+                                              setGrasscutterAverageMortality(
+                                                e.target.value
+                                              )
+                                            }
+                                          />
+                                        </Form.Group>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Grasscutter - Average Harvest
+                                            Weight/Animal
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Grasscutter - Average Harvest Weight/Animal)"
+                                            type="number"
+                                            id="Grasscutter_average_harvest"
+                                            value={grasscutterAverageHarvest}
+                                            onChange={(e) =>
+                                              setGrasscutterAverageHarvest(
+                                                e.target.value
+                                              )
+                                            }
+                                          />
+                                        </Form.Group>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Grasscutter - Total Harvest Weight
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Grasscutter - Total Harvest Weight"
+                                            type="number"
+                                            id="Grasscutter_total_harvest"
+                                            value={grasscutterTotalHarvest}
+                                            onChange={(e) =>
+                                              setGrasscutterTotalHarvest(
+                                                e.target.value
+                                              )
+                                            }
+                                          />
+                                        </Form.Group>
+                                      </>
+                                    ) : null}
+
+                                    {typesOfLiveStockFarming.includes(
+                                      "Sericulture (Silkworm production)"
+                                    ) ? (
+                                      <>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Sericulture - Stock Capacity/Cycle
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Sericulture - Stock Capacity/Cycle"
+                                            type="number"
+                                            id="Sericulture_stock_capacity"
+                                            value={sericultureStockCapacity}
+                                            onChange={(e) =>
+                                              setSericultureStockCapacity(
+                                                e.target.value
+                                              )
+                                            }
+                                          />
+                                        </Form.Group>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Sericulture - Average Mortality /
+                                            Cycle
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Sericulture - Average Mortality / Cycle"
+                                            type="number"
+                                            id="Sericulture_average_mortality"
+                                            value={sericultureAverageMortality}
+                                            onChange={(e) =>
+                                              setSericultureAverageMortality(
+                                                e.target.value
+                                              )
+                                            }
+                                          />
+                                        </Form.Group>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Sericulture - Average Harvest
+                                            Weight/Animal
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Sericulture - Average Harvest Weight/Animal)"
+                                            type="number"
+                                            id="Sericulture_average_harvest"
+                                            value={sericultureAverageHarvest}
+                                            onChange={(e) =>
+                                              setSericultureAverageHarvest(
+                                                e.target.value
+                                              )
+                                            }
+                                          />
+                                        </Form.Group>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Sericulture - Total Harvest Weight
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Sericulture - Total Harvest Weight"
+                                            type="number"
+                                            id="Sericulture_total_harvest"
+                                            value={sericultureTotalHarvest}
+                                            onChange={(e) =>
+                                              setSericultureTotalHarvest(
+                                                e.target.value
+                                              )
+                                            }
+                                          />
+                                        </Form.Group>
+                                      </>
+                                    ) : null}
+
+                                    {typesOfLiveStockFarming.includes(
+                                      "Bee-keeping"
+                                    ) ? (
+                                      <>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Beekeeping - Stock Capacity/Cycle
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Bee-keeping - Stock Capacity/Cycle"
+                                            type="number"
+                                            id="bee_keeping_stock_capacity"
+                                            value={beekeepingStockCapacity}
+                                            onChange={(e) =>
+                                              setBeekeepingStockCapacity(
+                                                e.target.value
+                                              )
+                                            }
+                                          />
+                                        </Form.Group>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Bee-keeping - Average Mortality /
+                                            Cycle
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Bee-keeping - Average Mortality / Cycle"
+                                            type="number"
+                                            id="bee_keeping_average_mortality"
+                                            value={beekeepingAverageMortality}
+                                            onChange={(e) =>
+                                              setBeekeepingAverageMortality(
+                                                e.target.value
+                                              )
+                                            }
+                                          />
+                                        </Form.Group>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Bee-keeping - Average Harvest
+                                            Weight/Animal
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Bee-keeping - Average Harvest Weight/Animal)"
+                                            type="number"
+                                            id="bee_keeping_average_harvest"
+                                            value={beekeepingAverageHarvest}
+                                            onChange={(e) =>
+                                              setBeekeepingAverageHarvest(
+                                                e.target.value
+                                              )
+                                            }
+                                          />
+                                        </Form.Group>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Bee-keeping - Total Harvest Weight
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Bee-keeping - Total Harvest Weight"
+                                            type="number"
+                                            id="bee_keeping_total_harvest"
+                                            value={beekeepingTotalHarvest}
+                                            onChange={(e) =>
+                                              setBeekeepingTotalHarvest(
+                                                e.target.value
+                                              )
+                                            }
+                                          />
+                                        </Form.Group>
+                                      </>
+                                    ) : null}
+
+                                    {/* other type of livestock farming */}
+                                    {typesOfLiveStockFarming.includes(
+                                      "Other"
+                                    ) ? (
+                                      <>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Other Livestock - Stock
+                                            Capacity/Cycle
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Other Livestock - Stock Capacity/Cycle"
+                                            type="number"
+                                            id="bee_keeping_stock_capacity"
+                                            value={otherLivestockStockCapacity}
+                                            onChange={(e) =>
+                                              setOtherLivestockStockCapacity(
+                                                e.target.value
+                                              )
+                                            }
+                                          />
+                                        </Form.Group>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Other Livestock - Average Mortality
+                                            / Cycle
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Other Livestock - Average Mortality / Cycle"
+                                            type="number"
+                                            id="other_livestock_average_mortality"
+                                            value={
+                                              otherLivestockAverageMortality
+                                            }
+                                            onChange={(e) =>
+                                              setOtherLivestockAverageMortality(
+                                                e.target.value
+                                              )
+                                            }
+                                          />
+                                        </Form.Group>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Other Livestock - Average Harvest
+                                            Weight/Animal
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Other Livestock - Average Harvest Weight/Animal)"
+                                            type="number"
+                                            id="other_livestock_average_harvest"
+                                            value={otherLivestockAverageHarvest}
+                                            onChange={(e) =>
+                                              setOtherLivestockAverageHarvest(
+                                                e.target.value
+                                              )
+                                            }
+                                          />
+                                        </Form.Group>
+                                        <Form.Group className="mb-4">
+                                          <Form.Label className="mb-2">
+                                            Other Livestock - Total Harvest
+                                            Weight
+                                          </Form.Label>
+                                          <Form.Control
+                                            placeholder="Other Livestock - Total Harvest Weight"
+                                            type="number"
+                                            id="other_livestock_total_harvest"
+                                            value={otherLivestockTotalHarvest}
+                                            onChange={(e) =>
+                                              setOtherLivestockTotalHarvest(
+                                                e.target.value
+                                              )
+                                            }
+                                          />
+                                        </Form.Group>
+                                      </>
+                                    ) : null}
                                   </>
-                                ) : null}
-                              </>
+                                )}
 
                               {/* Access and Utilization of Services/state benefits/ ACCESS TO INPUT PROVIDERS */}
                               <Form.Group
@@ -5733,7 +5816,7 @@ const RegisterForm = () => {
                                 <Form.Check
                                   type="radio"
                                   aria-label="Yes"
-                                  id="Yes"
+                                  id="input_providers_yes"
                                   value={"Yes"}
                                   label="Yes"
                                   name="input_providers"
@@ -5751,7 +5834,7 @@ const RegisterForm = () => {
                                   type="radio"
                                   aria-label="No"
                                   value={"No"}
-                                  id="No"
+                                  id="input_providers_no"
                                   label="No"
                                   name="input_providers"
                                   checked={accessToInputProviders === "No"}
@@ -5779,7 +5862,7 @@ const RegisterForm = () => {
                                 <Form.Check
                                   type="radio"
                                   aria-label="Yes"
-                                  id="Yes"
+                                  id="access_bds_yes"
                                   value={"Yes"}
                                   label="Yes"
                                   name="access_bds"
@@ -5795,14 +5878,12 @@ const RegisterForm = () => {
                                   type="radio"
                                   aria-label="No"
                                   value={"No"}
-                                  id="No"
+                                  id="access_bds_no"
                                   label="No"
                                   name="access_bds"
                                   checked={accessToBDS === "No"}
                                   onChange={(e) =>
-                                    setAccesToInputProviders(
-                                      e.target.value.trim()
-                                    )
+                                    setAccessToBDS(e.target.value.trim())
                                   }
                                   required
                                   feedback="Select access to business developer service"
@@ -5822,7 +5903,7 @@ const RegisterForm = () => {
                                 <Form.Check
                                   type="radio"
                                   aria-label="Yes"
-                                  id="Yes"
+                                  id="access_offtakers_yes"
                                   value={"Yes"}
                                   label="Yes"
                                   name="access_offtakers"
@@ -5838,7 +5919,7 @@ const RegisterForm = () => {
                                   type="radio"
                                   aria-label="No"
                                   value={"No"}
-                                  id="No"
+                                  id="access_offtakers_no"
                                   label="No"
                                   name="access_offtakers"
                                   checked={accessToOfftakers === "No"}
@@ -5863,7 +5944,7 @@ const RegisterForm = () => {
                                 <Form.Check
                                   type="radio"
                                   aria-label="Yes"
-                                  id="Yes"
+                                  id="access_toFSP_yes"
                                   value={"Yes"}
                                   label="Yes"
                                   name="access_toFSP"
@@ -5879,7 +5960,7 @@ const RegisterForm = () => {
                                   type="radio"
                                   aria-label="No"
                                   value={"No"}
-                                  id="No"
+                                  id="access_toFSP_no"
                                   label="No"
                                   name="access_toFSP"
                                   checked={accessToFSP === "No"}
@@ -5904,7 +5985,7 @@ const RegisterForm = () => {
                                 <Form.Check
                                   type="radio"
                                   aria-label="Yes"
-                                  id="Yes"
+                                  id="access_toMSP_yes"
                                   value={"Yes"}
                                   label="Yes"
                                   name="access_toMSP"
@@ -5920,7 +6001,7 @@ const RegisterForm = () => {
                                   type="radio"
                                   aria-label="No"
                                   value={"No"}
-                                  id="No"
+                                  id="access_toMSP_no"
                                   label="No"
                                   name="access_toMSP"
                                   checked={accessToMSP === "No"}
@@ -5945,7 +6026,7 @@ const RegisterForm = () => {
                                 <Form.Check
                                   type="radio"
                                   aria-label="Yes"
-                                  id="Yes"
+                                  id="access_toAdvisoryService_yes"
                                   value={"Yes"}
                                   label="Yes"
                                   name="access_toAdvisoryService"
@@ -5963,7 +6044,7 @@ const RegisterForm = () => {
                                   type="radio"
                                   aria-label="No"
                                   value={"No"}
-                                  id="No"
+                                  id="access_toAdvisoryService_no"
                                   label="No"
                                   name="access_toAdvisoryService"
                                   checked={accessToAdvisoryService === "No"}
@@ -5991,7 +6072,7 @@ const RegisterForm = () => {
                                 <Form.Check
                                   type="radio"
                                   aria-label="Yes"
-                                  id="Yes"
+                                  id="government_incentive_yes"
                                   value={"Yes"}
                                   label="Yes"
                                   name="government_incentive"
@@ -6009,7 +6090,7 @@ const RegisterForm = () => {
                                   type="radio"
                                   aria-label="No"
                                   value={"No"}
-                                  id="No"
+                                  id="government_incentive_no"
                                   label="No"
                                   name="government_incentive"
                                   checked={govermentIncentives === "No"}
@@ -6036,7 +6117,7 @@ const RegisterForm = () => {
                                 <Form.Check
                                   type="radio"
                                   aria-label="Yes"
-                                  id="Yes"
+                                  id="government_farmland_yes"
                                   value={"Yes"}
                                   label="Yes"
                                   name="government_farmland"
@@ -6052,7 +6133,7 @@ const RegisterForm = () => {
                                   type="radio"
                                   aria-label="No"
                                   value={"No"}
-                                  id="No"
+                                  id="government_farmland_no"
                                   label="No"
                                   name="government_farmland"
                                   checked={accessToGovtLand === "No"}
@@ -6077,7 +6158,7 @@ const RegisterForm = () => {
                                 <Form.Check
                                   type="radio"
                                   aria-label="Yes"
-                                  id="Yes"
+                                  id="ogstep_farmer_yes"
                                   value={"Yes"}
                                   label="Yes"
                                   name="ogstep_farmer"
@@ -6093,7 +6174,7 @@ const RegisterForm = () => {
                                   type="radio"
                                   aria-label="No"
                                   value={"No"}
-                                  id="No"
+                                  id="ogstep_farmer_no"
                                   label="No"
                                   name="ogstep_farmer"
                                   checked={ogstepFarmer === "No"}
@@ -6181,45 +6262,47 @@ const RegisterForm = () => {
                               {/* Annual farm income (NGN)/ crops income
                                */}
 
-                              <Form.Group
-                                className="mb-4"
-                                controlId="annual_income"
-                              >
-                                <Form.Label className="mb-2">
-                                  Annual Crops Income (NGN)
-                                </Form.Label>
-                                <Form.Control
-                                  placeholder="10000"
-                                  type="number"
-                                  value={cropsIncome}
-                                  onChange={(e) =>
-                                    setCropsIncome(e.target.value.trim())
-                                  }
-                                />
-                              </Form.Group>
+                              {typeOfFarming.includes("Crop farming") && (
+                                <Form.Group
+                                  className="mb-4"
+                                  controlId="annual_income"
+                                >
+                                  <Form.Label className="mb-2">
+                                    Annual Crops Income (NGN)
+                                  </Form.Label>
+                                  <Form.Control
+                                    placeholder="10000"
+                                    type="number"
+                                    value={cropsIncome}
+                                    onChange={(e) =>
+                                      setCropsIncome(e.target.value.trim())
+                                    }
+                                  />
+                                </Form.Group>
+                              )}
 
                               {/* Annual farm income (NGN)/ livestock income
                                */}
-
-                              <Form.Group
-                                className="mb-4"
-                                controlId="annual_income"
-                              >
-                                <Form.Label className="mb-2">
-                                  Annual Livestock Income (NGN)
-                                </Form.Label>
-                                <Form.Control
-                                  placeholder="10000"
-                                  type="number"
-                                  value={livestockIncome}
-                                  onChange={(e) =>
-                                    setLivestockIncome(e.target.value.trim())
-                                  }
-                                />
-                              </Form.Group>
+                              {typeOfFarming.includes("Livestocks") && (
+                                <Form.Group
+                                  className="mb-4"
+                                  controlId="annual_income"
+                                >
+                                  <Form.Label className="mb-2">
+                                    Annual Livestock Income (NGN)
+                                  </Form.Label>
+                                  <Form.Control
+                                    placeholder="10000"
+                                    type="number"
+                                    value={livestockIncome}
+                                    onChange={(e) =>
+                                      setLivestockIncome(e.target.value.trim())
+                                    }
+                                  />
+                                </Form.Group>
+                              )}
 
                               {/* total  annual cost of production/expenditure (farmer) */}
-
                               <Form.Group
                                 className="mb-4"
                                 controlId="totalExpenditure"
@@ -6360,7 +6443,7 @@ const RegisterForm = () => {
                                   id="rev_btw_100_and_200k"
                                   label="100,000 - 200,000"
                                   name="total_revenue"
-                                  checked={totalRevenue === "100,000 - 200,00"}
+                                  checked={totalRevenue === "100,000 - 200,000"}
                                   onChange={(e) =>
                                     setTotalRevenue(e.target.value.trim())
                                   }
@@ -6751,7 +6834,7 @@ const RegisterForm = () => {
                             <Form.Check
                               type="radio"
                               aria-label="Yes"
-                              id="yes"
+                              id="cooperative_association_yes"
                               label="Yes"
                               value={"Yes"}
                               name="cooperative_association"
@@ -6763,7 +6846,7 @@ const RegisterForm = () => {
                             <Form.Check
                               type="radio"
                               aria-label="No"
-                              id="cop_mem_no"
+                              id="cooperative_association_no"
                               label="No"
                               value={"No"}
                               name="cooperative_association"
@@ -7167,7 +7250,7 @@ const RegisterForm = () => {
                       </Button>
                     </Col>
                     <Col xs="auto">
-                      {validated === true ? (
+                      {/* {validated === true ? (
                         <Button
                           className=""
                           style={{ color: "white" }}
@@ -7175,18 +7258,16 @@ const RegisterForm = () => {
                           onClick={handleSubmit}
                         >
                           Submit form
-                        </Button>
-                      ) : (
-                        <Button
-                          className="d-flex justify-content-end"
-                          style={{ color: "white" }}
-                          // disabled={currentStep === 5 ? true : false}
-                          // onClick={() => setCurrentStep(currentStep + 1)}
-                          onClick={handleNextButton}
-                        >
-                          {currentStep === 5 ? "Validate" : "Next"}
-                        </Button>
-                      )}
+                        </Button> */}
+                      {/* ) : ( */}
+                      <Button
+                        className="d-flex justify-content-end"
+                        style={{ color: "white" }}
+                        onClick={handleNextButton}
+                      >
+                        {currentStep === 5 ? "Submit" : "Next"}
+                      </Button>
+                      {/* )} */}
                     </Col>
                   </Row>
                 </Card.Body>

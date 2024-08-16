@@ -3406,7 +3406,7 @@ export const countries = [
       {
         name: "Ogun State",
         id: 28,
-        lgas: [
+        locals: [
           {
             name: "Abeokuta North",
             value: "Abeokuta_North",
