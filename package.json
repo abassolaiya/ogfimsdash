@@ -5,19 +5,21 @@
   "homepage": "/",
   "basename": "./",
   "dependencies": {
-    "@babel/core": "7.4.3",
+    "@babel/core": "^7.25.7",
     "@svgr/webpack": "4.1.0",
     "@typescript-eslint/eslint-plugin": "1.6.0",
     "@typescript-eslint/parser": "1.6.0",
     "babel-eslint": "10.0.1",
     "babel-jest": "^24.9.0",
-    "babel-loader": "8.0.5",
+    "babel-loader": "^8.0.0",
     "babel-plugin-named-asset-import": "^0.3.8",
     "babel-preset-react-app": "^9.1.0",
     "bootstrap": "^5.1.3",
     "camelcase": "^5.2.0",
     "case-sensitive-paths-webpack-plugin": "2.2.0",
+    "chart.js": "^4.4.4",
     "css-loader": "^3.6.0",
+    "dompurify": "^3.1.7",
     "dotenv": "6.2.0",
     "dotenv-expand": "4.2.0",
     "emailjs-com": "^3.2.0",
@@ -55,6 +57,7 @@
     "react-animate-on-scroll": "^2.1.5",
     "react-app-polyfill": "^1.0.5",
     "react-bootstrap": "^2.9.1",
+    "react-chartjs-2": "^5.2.0",
     "react-countup": "^4.4.0",
     "react-dev-utils": "^9.1.0",
     "react-dom": "16.14.0",
@@ -66,6 +69,7 @@
     "react-parallax": "^3.3.0",
     "react-reveal": "^1.2.2",
     "react-router-dom": "^5.3.0",
+    "react-scripts": "^5.0.1",
     "react-scroll-up": "^1.3.3",
     "react-scrollspy": "^3.4.2",
     "react-slick": "^0.29.0",
@@ -77,6 +81,7 @@
     "react-tsparticles": "^2.2.4",
     "react-video-tag": "0.0.10",
     "react-visibility-sensor": "^5.1.1",
+    "recharts": "^2.12.7",
     "resolve": "1.10.0",
     "sass-loader": "10.4.1",
     "semver": "6.0.0",
@@ -158,9 +163,18 @@
   "babel": {
     "presets": [
       "react-app"
+    ],
+    "plugins": [
+      "@babel/plugin-proposal-class-properties"
     ]
   },
   "devDependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.18.6",
+    "@babel/plugin-proposal-optional-chaining": "^7.21.0",
+    "@babel/preset-env": "^7.25.7",
+    "@babel/preset-react": "^7.25.7",
+    "customize-cra": "^1.0.0",
+    "react-app-rewired": "^2.2.1",
     "sass": "^1.69.5",
     "terser-webpack-plugin": "^4.2.3"
   }

@@ -1,0 +1,169 @@
+.commodity-price-list {
+  display: flex;
+  overflow-x: auto;
+  margin-top: 40px;
+  padding: 10px;
+  gap: 15px; /* Space between commodity boxes */
+}
+
+.commodity-box {
+  width: 400px; /* Adjusted width */
+  border: 2px solid #67a961;
+  background-color: #f8fff8;
+  padding: 20px;
+  border-radius: 5px;
+  flex-shrink: 0; /* Prevent shrinking in flex container */
+  display: flex;
+  flex-direction: column;
+}
+
+.top-section {
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  margin-bottom: 2px;
+}
+
+.price {
+  color: #67a961;
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 3px;
+}
+
+.description {
+  font-size: 14px;
+  color: #8f9c8f;
+  text-align: left;
+}
+
+.middle-section hr,
+.bottom-section hr {
+  border: none;
+  border-top: 2px solid rgba(200, 200, 200, 0.7); /* Lighter and more transparent grey */
+  margin: 5px 0; /* Adjusted margin for spacing */
+}
+
+.middle-section {
+  border-top: 1px solid #ddd;
+  padding-top: 5px;
+  margin-top: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.current-price {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.name {
+  font-size: 24px; /* Larger font size for the price */
+  color: #67a961;
+  margin-right: 5px;
+  font-weight: bold;
+}
+
+.price-container {
+  display: flex;
+  align-items: center;
+  font-size: 20px; /* Adjust for desired size */
+  font-weight: bold;
+  color: black;
+  text-align: left;
+}
+
+.price {
+  font-size: 40px; /* Larger font size for the price */
+  color: black;
+  text-align: left;
+  font-weight: 600;
+}
+
+.arrow {
+  font-size: 18px;
+  margin-left: 5px;
+}
+
+.line-plot {
+  width: 40px; /* Width of the dummy line plot */
+  height: 10px;
+  margin-left: 40px;
+  border-radius: 3px;
+}
+
+.up {
+  color: green;
+}
+
+.down {
+  color: red;
+}
+
+.percentage-change {
+  font-size: 14px; /* Adjust for desired size */
+  align-self: flex-start;
+}
+
+.line-plot {
+  font-size: 12px;
+  color: gray;
+  margin-top: 5px;
+}
+
+.percentage-change {
+  font-size: 12px;
+  color: grey;
+  text-align: right;
+  margin-bottom: 5px;
+}
+
+.bottom-section {
+  margin-top: 15px;
+}
+
+.local-gov-prices {
+  display: flex; /* Set to flex for row alignment */
+  justify-content: space-between;
+  gap: 5px; /* Space between LGA boxes */
+  margin: 20px 0;
+}
+
+.lga-box {
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
+  border: 2px solid #8fbc8f; /* Light green border */
+  padding: 5px;
+  border-radius: 3px;
+  width: 100px; /* Set width to fit three boxes in a row */
+  height: 80px;
+  justify-content: center;
+  background: #e5fbe5;
+}
+
+.lga-name {
+  font-weight: bold;
+  font-size: 11px;
+  margin-bottom: 4px;
+  color: #67a961;
+  /* align-self: center; */
+}
+
+.lga-price {
+  font-size: 11px;
+  font-weight: 600;
+  color: #333;
+  margin-left: 1px;
+}
+
+.last-updated {
+  font-size: 12px;
+  font-weight: 400;
+  color: #888;
+  text-align: left;
+  margin-top: 20px;
+}

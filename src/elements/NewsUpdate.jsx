@@ -3,6 +3,7 @@ import PageHelmet from "../component/common/Helmet";
 import Pagination from "../elements/common/Pagination";
 import ScrollToTop from "react-scroll-up";
 import { useParams, useHistory } from "react-router-dom";
+import DOMPurify from 'dompurify';
 import { FiChevronUp } from "react-icons/fi";
 import Header from "../component/header/Header";
 import Footer from "../component/footer/Footer";
@@ -18,6 +19,17 @@ const NewsUpdate = () => {
       getNews();
     }
   }, []);
+
+  const sanitizeHTML = (html) => {
+    const unescapedHTML = html
+      .replace(/&lt;/g, "<")
+      .replace(/&gt;/g, ">")
+      .replace(/&amp;/g, "&");
+    return DOMPurify.sanitize(unescapedHTML, {
+      ALLOWED_TAGS: ["p", "strong", "em", "u", "a", "br"],
+      ALLOWED_ATTR: ["href", "target"],
+    });
+  };
 
   const getNews = () => {
     const headers = {
@@ -95,7 +107,7 @@ const NewsUpdate = () => {
                             <p
                               className="description descriptionTrim"
                               dangerouslySetInnerHTML={{
-                                __html: value.content,
+                                __html: sanitizeHTML(value.content),
                               }}
                             ></p>
                           </div>

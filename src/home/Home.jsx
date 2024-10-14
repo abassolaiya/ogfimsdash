@@ -3,12 +3,13 @@ import ModalVideo from "react-modal-video";
 import ScrollToTop from "react-scroll-up";
 import Slider from "react-slick";
 import { Row, Col, Button, Card, Form, Modal } from "react-bootstrap";
-
+import DOMPurify from 'dompurify';
 import { Link } from "react-router-dom";
 import { slideSlick } from "../page-demo/script";
 import BlogContent from "../elements/blog/BlogContent";
 import Header from "../component/header/HeaderFive";
 import Footer from "../component/footer/Footer";
+import CommodityPriceList from "../component/CommodityPriceList";
 import TeamOne from "../blocks/team/TeamOne";
 import Accordion01 from "../elements/Accordion";
 import Helmet from "../component/common/Helmet";
@@ -103,6 +104,18 @@ const Home = () => {
     //console.log(e);
     setShow(true);
   };
+
+  const sanitizeHTML = (html) => {
+    const unescapedHTML = html
+      .replace(/&lt;/g, "<")
+      .replace(/&gt;/g, ">")
+      .replace(/&amp;/g, "&");
+    return DOMPurify.sanitize(unescapedHTML, {
+      ALLOWED_TAGS: ["p", "strong", "em", "u", "a", "br"],
+      ALLOWED_ATTR: ["href", "target"],
+    });
+  };
+
 
   //console.log(baseURL+videos[0]?.url)
   const AnyReactComponent = ({ userData }) => (
@@ -392,7 +405,6 @@ const Home = () => {
         color="color-black"
       />
       {/* End Header Area  */}
-
       {/* Start Slider Area   */}
       <div className="slider-wrapper">
         <div className="slider-activation">
@@ -560,6 +572,18 @@ const Home = () => {
       <br />
       <br />
       {/* End Counterup Area */}
+
+      {/* Start Counterup Area */}
+      <div className="counterup-area pt--40 pb--80 theme-text-white">
+        <div className="container">
+          <div className="section-title">
+            <h2 className="title">Market Trends</h2>
+          </div>
+          <div>
+            <CommodityPriceList />
+          </div>
+        </div>
+      </div>
 
       {/* Start Strategic Initiatives */}
 
@@ -944,7 +968,7 @@ const Home = () => {
                             <p
                               className="description descriptionTrim"
                               dangerouslySetInnerHTML={{
-                                __html: value.content,
+                                __html: sanitizeHTML(value.content),
                               }}
                             ></p>
                           </div>

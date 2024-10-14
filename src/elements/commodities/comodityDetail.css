@@ -1,0 +1,10 @@
+.commodityWrapper {
+  margin: 12rem;
+}
+
+@media (max-width: 768px) {
+  /* This targets tablets and smaller devices */
+  .commodityWrapper {
+    margin: 14rem 1rem 3rem;
+  }
+}

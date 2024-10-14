@@ -4,6 +4,7 @@ import { FiClock, FiUser, FiMessageCircle, FiHeart } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import ScrollToTop from "react-scroll-up";
 import { useParams, useHistory, useLocation } from "react-router-dom";
+import DOMPurify from 'dompurify';
 
 import { FiChevronUp } from "react-icons/fi";
 import Header from "../component/header/Header";
@@ -14,6 +15,18 @@ const NewsDetails = () => {
   const location = useLocation();
   const [data, setData] = useState(location.state?.data);
   const newsBg = encodeURI(`${baseURL}${location.state?.data.featured_image}`);
+
+  const sanitizeHTML = (html) => {
+    const unescapedHTML = html
+      .replace(/&lt;/g, "<")
+      .replace(/&gt;/g, ">")
+      .replace(/&amp;/g, "&");
+    return DOMPurify.sanitize(unescapedHTML, {
+      ALLOWED_TAGS: ["p", "strong", "em", "u", "a", "br"],
+      ALLOWED_ATTR: ["href", "target"],
+    });
+  };
+
   return (
     <React.Fragment>
       <PageHelmet pageTitle="News Details" />
@@ -63,7 +76,7 @@ const NewsDetails = () => {
               <div className="inner-wrapper">
                 <div
                   className="inner"
-                  dangerouslySetInnerHTML={{ __html: data.content }}
+                  dangerouslySetInnerHTML={{ __html: sanitizeHTML(data.content) }}
                 ></div>
               </div>
             </div>

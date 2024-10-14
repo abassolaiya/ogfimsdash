@@ -7,61 +7,61 @@ import Footer from "../component/footer/Footer";
 import { baseURL } from "../httpService";
 import { Link } from "react-router-dom";
 
-const Publications = () => {
-  const [publications, setPublications] = useState([]);
+const Tools = () => {
+  const [tools, setTools] = useState([]);
   const [currentPage, setCurrentPage] = useState(1); // Track current page
-  const [publicationsPerPage] = useState(6); // Set number of publications per page
+  const [toolsPerPage] = useState(6); // Set number of tools per page
   const [totalPages, setTotalPages] = useState(1); // Track total pages
   const [searchTerm, setSearchTerm] = useState(""); // Track search term
   const [filter, setFilter] = useState("all"); // Track selected filter
 
   useEffect(() => {
-    getPublications(currentPage, searchTerm, filter); // Fetch data when the component mounts or the page, searchTerm, or filter changes
+    getTools(currentPage, searchTerm, filter); // Fetch tools whenever currentPage, searchTerm, or filter changes
   }, [currentPage, searchTerm, filter]);
 
-  const getPublications = (page, searchTerm, filter) => {
+  const getTools = (page, searchTerm, filter) => {
     const headers = {
       "Content-Type": "application/json",
       Accept: "application/json",
     };
 
     // Construct the query params
-    let query = `limit=${publicationsPerPage}&page=${page}&order=desc`;
+    let query = `limit=${toolsPerPage}&page=${page}&order=desc`;
     if (searchTerm) query += `&search=${searchTerm}`;
-    if (filter && filter !== "all") query += `&filter=${filter}`;
+    if (filter && filter !== "all") query += `&category=${filter}`;
 
-    fetch(`${baseURL}publications?${query}`, {
+    fetch(`${baseURL}tools?${query}`, {
       method: "GET",
       headers,
     })
       .then((response) => response.json())
       .then((responseJson) => {
-        setPublications(responseJson.publications); // Set the new publications for the current page
-        setTotalPages(Math.ceil(responseJson.total / publicationsPerPage)); // Update total pages
+        setTools(responseJson.tools); // Set the fetched tools
+        setTotalPages(Math.ceil(responseJson.total / toolsPerPage)); // Calculate total pages
       })
       .catch((error) => {
-        console.log("Error fetching publications:", error);
+        console.log("Error fetching tools:", error);
       });
   };
 
-  // Handle the next and previous buttons
+  // Handle the next and previous page buttons
   const handleNextPage = () => {
     if (currentPage < totalPages) {
       setCurrentPage((prevPage) => prevPage + 1);
-      window.scrollTo(0, 0); // Scroll to top
+      window.scrollTo(0, 0); // Scroll to top on page change
     }
   };
 
   const handlePreviousPage = () => {
     if (currentPage > 1) {
       setCurrentPage((prevPage) => prevPage - 1);
-      window.scrollTo(0, 0); // Scroll to top
+      window.scrollTo(0, 0); // Scroll to top on page change
     }
   };
 
   return (
     <React.Fragment>
-      <PageHelmet pageTitle="Publications" />
+      <PageHelmet pageTitle="Tools" />
 
       <Header
         headertransparent="header--transparent"
@@ -78,13 +78,12 @@ const Publications = () => {
           <div className="row">
             <div className="col-lg-12">
               <div className="rn-page-title text-center pt--100">
-                <h2 className="title text-white">Publications</h2>
+                <h2 className="title text-white">Tools</h2>
               </div>
             </div>
           </div>
         </div>
       </div>
-
       {/* End Breadcrump Area */}
 
       {/* Start Search and Filter Area */}
@@ -94,7 +93,7 @@ const Publications = () => {
             {/* Search Bar */}
             <input
               type="text"
-              placeholder="Search publications..."
+              placeholder="Search tools..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="form-control"
@@ -108,9 +107,9 @@ const Publications = () => {
               onChange={(e) => setFilter(e.target.value)}
             >
               <option value="all">All Categories</option>
-              <option value="research">Research</option>
-              <option value="reports">Reports</option>
-              <option value="articles">Articles</option>
+              <option value="productivity">Productivity</option>
+              <option value="design">Design</option>
+              <option value="development">Development</option>
               {/* Add more filter options as needed */}
             </select>
           </div>
@@ -122,8 +121,8 @@ const Publications = () => {
       <div className="rn-blog-area ptb--120 bg_color--1">
         <div className="container">
           <div className="row mt--30 blog-style--2">
-            {publications.length > 0
-              ? publications.map((value, i) => (
+            {tools.length > 0
+              ? tools.map((value, i) => (
                   <div
                     className="col-lg-4 col-md-6 col-sm-6 col-12 mt--30"
                     key={i}
@@ -133,7 +132,7 @@ const Publications = () => {
                         <Link
                           style={{ textDecoration: "none" }}
                           to={{
-                            pathname: "/publication-details",
+                            pathname: "/tool-details",
                             state: { data: value },
                           }}
                         >
@@ -158,7 +157,7 @@ const Publications = () => {
                               <Link
                                 style={{ textDecoration: "none" }}
                                 to={{
-                                  pathname: "/publication-details",
+                                  pathname: "/tool-details",
                                   state: { data: value },
                                 }}
                               >
@@ -176,7 +175,7 @@ const Publications = () => {
                           style={{ textDecoration: "none" }}
                           className="transparent_link"
                           to={{
-                            pathname: "/publication-details",
+                            pathname: "/tool-details",
                             state: { data: value },
                           }}
                         ></Link>
@@ -184,7 +183,7 @@ const Publications = () => {
                     </div>
                   </div>
                 ))
-              : <p>No publications found.</p>}
+              : <p>No tools found.</p>}
           </div>
 
           {/* Pagination Controls */}
@@ -252,4 +251,4 @@ const Publications = () => {
   );
 };
 
-export default Publications;
+export default Tools;

@@ -112,14 +112,21 @@ class Header extends Component {
                       </Link>
                     </li>
                     <li>
-                      <a
+                      {/* <a
                         style={{ textDecoration: "none" }}
                         href="https://www.iita.org/digital-tools"
                         target="_blank"
                       >
                         {" "}
                         Digital Tools{" "}
-                      </a>
+                      </a> */}
+                      <Link
+                        style={{ textDecoration: "none" }}
+                        to="/tools"
+                      >
+                        {" "}
+                        Digital Tools{" "}
+                      </Link>
                     </li>
                     <li>
                       <Link style={{ textDecoration: "none" }} to="/videos">

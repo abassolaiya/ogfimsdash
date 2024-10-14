@@ -7,7 +7,7 @@ import "react-toastify/dist/ReactToastify.min.css";
 // Create Import File
 import "./index.scss";
 import "./custom_css.scss";
-
+import WhatsAppButton from "./component/WhatsAppButton";
 // Common Layout
 // import Layout from "./component/common/App";
 
@@ -25,6 +25,9 @@ import NewsUpdate from "./elements/NewsUpdate";
 import NewsDetails from "./elements/NewsDetails";
 import Publications from "./elements/Publications";
 import PublicationDetails from "./elements/PublicationDetails";
+import Tools from "./elements/Tools";
+
+import CommodityDetail from "./elements/commodities/CommodityDetail";
 
 import Service from "./elements/Service";
 import PortfolioDetails from "./elements/PortfolioDetails";
@@ -79,6 +82,11 @@ class Root extends Component {
             />
             <Route
               exact
+              path={`${process.env.PUBLIC_URL}/tools`}
+              component={Tools}
+            />
+            <Route
+              exact
               path={`${process.env.PUBLIC_URL}/contact`}
               component={Contact}
             />
@@ -113,6 +121,11 @@ class Root extends Component {
               path={`${process.env.PUBLIC_URL}/news-details`}
               component={NewsDetails}
             />
+            <Route
+              exact
+              path={`${process.env.PUBLIC_URL}/commodity/:id`}
+              component={CommodityDetail}
+            />
 
             <Route
               path={`${process.env.PUBLIC_URL}/404`}
@@ -121,6 +134,9 @@ class Root extends Component {
             <Route component={error404} />
           </Switch>
         </PageScrollTop>
+        <WhatsAppButton phoneNumber="07062962468" 
+        message="Hello, I have a question!"/>
+
       </BrowserRouter>
     );
   }

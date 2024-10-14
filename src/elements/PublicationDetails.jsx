@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import { FiCheck } from "react-icons/fi";
+import { FiChevronUp } from "react-icons/fi";
 import PageHelmet from "../component/common/Helmet";
 import ScrollToTop from "react-scroll-up";
-import { useParams, useHistory, useLocation } from "react-router-dom";
-import { FiChevronUp } from "react-icons/fi";
+import { useLocation } from "react-router-dom";
 import Header from "../component/header/Header";
 import Footer from "../component/footer/Footer";
 import { baseURL } from "../httpService";
@@ -11,7 +10,28 @@ import { baseURL } from "../httpService";
 const PublicationDetails = () => {
   const location = useLocation();
   const [data, setData] = useState(location.state?.data);
-  // console.log(data)
+
+  // Function to increment the download count
+  const handleDownload = async () => {
+    try {
+      // Call the download API to increment the count
+      const response = await fetch(`${baseURL}publications/download/${data._id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.ok) {
+        console.log("Download count incremented successfully");
+      } else {
+        console.error("Failed to increment download count");
+      }
+    } catch (error) {
+      console.error("Error incrementing download count:", error);
+    }
+  };
+
   return (
     <React.Fragment>
       {/* Start Pagehelmet  */}
@@ -49,13 +69,16 @@ const PublicationDetails = () => {
               <div className="service-details-inner">
                 <div className="inner row">
                   <div className="col-lg-4">
-                    <img src={`${baseURL + data.thumbnail}`} />
+                    <img src={`${baseURL + data.thumbnail}`} alt="Thumbnail" />
                     <p>Size: {data.size}</p>
-
+                    <p>Download count: {data.downloadCount}</p>
+                    {/* Handle Download Action */}
                     <a
                       style={{ textDecoration: "none" }}
                       href={`${baseURL}${data.url}`}
                       className="btn-default size-lg text-center"
+                      onClick={handleDownload} // Call the handleDownload function when clicked
+                      download
                     >
                       Download
                     </a>
@@ -85,4 +108,5 @@ const PublicationDetails = () => {
     </React.Fragment>
   );
 };
+
 export default PublicationDetails;

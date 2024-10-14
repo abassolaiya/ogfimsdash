@@ -1,0 +1,154 @@
+.commodity-detail-page {
+  padding: 20px;
+  background-color: #f0f5f0; /* Light green background */
+}
+
+.totalContainer {
+  border: 2px solid #67a961; /* 2px solid green border */
+  border-radius: 5px; /* Optional: add rounded corners if needed */
+}
+
+.plot-section {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 40px;
+  flex-wrap: wrap; /* Allow wrapping on smaller screens */
+}
+
+.plot-info {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: wrap; /* Wrap elements on smaller screens */
+}
+
+.info-box {
+  background-color: #67a961; /* Green background */
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  text-align: center;
+  align-content: center;
+  margin: 20px;
+  min-width: 130px;
+  height: 82px;
+}
+
+.price-box {
+  background-color: #f0f5f0; /* Green background */
+  border: 1px solid #67a961;
+  color: #82b87f;
+  padding: 10px;
+  border-radius: 5px;
+  text-align: center;
+  width: 120px;
+  margin: 20px;
+  height: 82px;
+}
+
+.price-box strong {
+  color: #67a961;
+  font-size: 24px;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.price-box span {
+  font-size: 14px;
+}
+
+.plot-controls {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px; /* Add some spacing for mobile view */
+}
+
+.control-dropdown {
+  margin-left: 10px;
+  margin-right: 30px;
+}
+
+.plot-container {
+  background-color: #e5fbe5; /* Faint green background for the plot */
+  padding: 20px 10px 20px 5px; /* Reduce left padding to move plot leftward */
+  border-radius: 5px;
+}
+
+.custom-chart {
+  height: 500px; /* Increased height for the plot */
+}
+
+/* Ensure all plot lines are green */
+.line-plot,
+.bar-plot,
+.histogram-plot {
+  stroke: #67a961; /* Green line color */
+  fill: #67a961; /* Fill color for bars and histograms */
+}
+
+.table-container {
+  margin-top: 40px;
+}
+
+.table th,
+.table td {
+  vertical-align: middle;
+}
+
+.table th {
+  width: 40%; /* Give more space to LGA name */
+}
+
+.table td:last-child {
+  text-align: right;
+}
+
+.trend-icon {
+  font-weight: bold;
+}
+
+.trend-icon.up {
+  color: green;
+}
+
+.trend-icon.down {
+  color: red;
+}
+
+/* Responsive Design for Mobile */
+@media (max-width: 768px) {
+  .commodity-detail-page {
+    padding: 10px; /* Reduce padding on mobile */
+  }
+
+  .plot-section {
+    flex-direction: column; /* Stack items vertically */
+    align-items: stretch; /* Align items to fill the container */
+  }
+
+  .plot-info {
+    justify-content: center; /* Center items on mobile */
+    margin-bottom: 10px; /* Add space between elements */
+  }
+
+  .info-box,
+  .price-box {
+    width: 100px; /* Reduce width */
+    height: 75px; /* Reduce height */
+    margin: 10px 5px; /* Reduce margin */
+  }
+
+  .plot-container {
+    padding: 10px 5px 10px 0; /* Further reduce left padding on mobile */
+  }
+
+  .custom-chart {
+    height: 300px; /* Reduce height of the plot on mobile */
+  }
+
+  .plot-controls {
+    justify-content: center; /* Center plot controls */
+  }
+}
