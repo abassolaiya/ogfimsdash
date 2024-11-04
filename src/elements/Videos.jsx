@@ -6,39 +6,44 @@ import { FiChevronUp } from "react-icons/fi";
 import Header from "../component/header/Header";
 import Footer from "../component/footer/Footer";
 import { baseURL } from "../httpService";
-import { Link } from "react-router-dom";
 import ModalVideo from "react-modal-video";
 
 const Videos = () => {
   const [videos, setVideos] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1); // Total pages for pagination
   const [isOpen, setIsOpen] = useState(false);
+  const [videoId, setVideoId] = useState(null); // To store the current video to play
+  const [isLoading, setIsLoading] = useState(false); // Loading state
 
-  const openModal = () => {
-    setIsOpen(!isOpen);
+  const openModal = (id) => {
+    setVideoId(id);
+    setIsOpen(true);
   };
 
+  // Fetch videos when the component mounts or when the current page changes
   useEffect(() => {
-    if (videos.length === 0) {
-      getVideos();
-    }
-  }, []);
+    getVideos(currentPage);
+  }, [currentPage]);
 
-  const getVideos = () => {
+  const getVideos = async (page) => {
+    setIsLoading(true); // Start loading
     const headers = {
       "Content-Type": "application/json",
       Accept: "application/json",
     };
-    fetch(`${baseURL}video?limit=100&page=1&order=desc`, {
-      method: "GET",
-      headers,
-    })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        setVideos(responseJson?.videos);
-      })
-      .catch((error) => {
-        console.log(error);
+    try {
+      const response = await fetch(`${baseURL}video?limit=10&page=${page}&order=desc`, {
+        method: "GET",
+        headers,
       });
+      const responseJson = await response.json();
+      setVideos(responseJson?.videos);
+      setTotalPages(responseJson.totalPages); // Ensure total pages are set
+    } catch (error) {
+    } finally {
+      setIsLoading(false); // Stop loading after the fetch
+    }
   };
 
   return (
@@ -51,7 +56,6 @@ const Videos = () => {
         logoname="logo.png"
       />
       {/* Start Breadcrump Area */}
-
       <div
         className="rn-page-title-area pt--120 pb--190 bg_image bg_image--20"
         data-black-overlay="6"
@@ -67,80 +71,68 @@ const Videos = () => {
           </div>
         </div>
       </div>
-
       {/* End Breadcrump Area */}
 
       {/* Video Area */}
-      {/* <div
-        className="col-lg-6 col-md-12 col-sm-12 col-12 mt--40"
-        style={{ zIndex: 1 }}
-      > */}
       <div className="rn-blog-area ptb--120 bg_color--1">
         <div className="container">
           <div className="row mt--30 blog-style--2">
-            {videos.length > 0
-              ? videos.map((value, i) => (
-                  <div
-                    className="col-lg-4 col-md-6 col-sm-6 col-12 mt--30"
-                    key={i}
-                  >
-                    <div className="im_box">
-                      <video
+            {isLoading ? (
+              <p>Loading videos...</p>
+            ) : videos.length > 0 ? (
+              videos.map((value, i) => (
+                <div
+                  className="col-lg-4 col-md-6 col-sm-6 col-12 mt--30"
+                  key={i}
+                >
+                  <div className="im_box">
+                    <div className="thumbnail position-relative">
+                      <img
                         className="w-100"
-                        height={"h-100"}
-                        controls
-                        poster={`${baseURL}${value.thumbnail}`}
-                      >
-                        <source src={`${baseURL}${value.url}`} />
-                      </video>
-                      {/* <div className="thumbnail position-relative">
-                        <img
-                          className="w-100"
-                          src={`${baseURL}${value.thumbnail}`}
-                          alt="Video thumbnail"
-                        />
-                        <ModalVideo
-                          channel="custom"
-                          isOpen={isOpen}
-                          url={`${baseURL}${value.url}`}
-                          // url={
-                          //   value.url.startsWith("https://")
-                          //     ? value.url
-                          //     : `${baseURL}${value.url}`
-                          // }
-                          onClose={() => setIsOpen(false)}
-                        />
-                        <button
-                          className="video-popup position-top-center theme-color"
-                          onClick={() => openModal()}
-                        >
-                          <span className="play-icon"></span>
-                        </button>
-                      </div> */}
-                      <div className="content">
-                        <div className="inner">
-                          <div className="content_heading">
-                            <h4 className="title descriptionTrim">
-                              <p to="">{value.title}</p>
-                            </h4>
-                            <br />
-                            <div className="row">
-                              <p className="description descriptionTrim col-lg-8 col-md-12 col-sm-12 col-12">
-                                {value.body}
-                              </p>
-                            </div>
-                          </div>
+                        src={`${baseURL}${value.thumbnail}`}
+                        alt="Video thumbnail"
+                        onClick={() => openModal(value.url)}
+                        style={{ cursor: "pointer" }}
+                      />
+                    </div>
+                    <div className="content">
+                      <div className="inner">
+                        <div className="content_heading">
+                          <h4 className="title descriptionTrim">
+                            {value.title}
+                          </h4>
+                          <p className="description descriptionTrim">
+                            {value.body}
+                          </p>
                         </div>
-                        {/*<Link className="transparent_link" to="/"></Link>*/}
                       </div>
                     </div>
                   </div>
-                ))
-              : null}
+                </div>
+              ))
+            ) : (
+              <p>No videos found.</p>
+            )}
           </div>
+
+          {/* Pagination */}
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={(page) => setCurrentPage(page)}
+          />
         </div>
       </div>
-      {/* End Blog Area */}
+
+      {/* ModalVideo for playing YouTube video */}
+      {videoId && (
+        <ModalVideo
+          channel="youtube"
+          isOpen={isOpen}
+          videoId={videoId} // Pass the YouTube video ID
+          onClose={() => setIsOpen(false)}
+        />
+      )}
 
       {/* Start Back To Top */}
       <div className="backto-top">
@@ -154,4 +146,5 @@ const Videos = () => {
     </React.Fragment>
   );
 };
+
 export default Videos;

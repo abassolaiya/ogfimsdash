@@ -5,7 +5,6 @@ import { FiChevronUp } from "react-icons/fi";
 import Header from "../component/header/Header";
 import Footer from "../component/footer/Footer";
 import { baseURL } from "../httpService";
-import { Link } from "react-router-dom";
 
 const Tools = () => {
   const [tools, setTools] = useState([]);
@@ -37,7 +36,7 @@ const Tools = () => {
       .then((response) => response.json())
       .then((responseJson) => {
         setTools(responseJson.tools); // Set the fetched tools
-        setTotalPages(Math.ceil(responseJson.total / toolsPerPage)); // Calculate total pages
+        setTotalPages(responseJson.totalPages); // Set total pages from the response
       })
       .catch((error) => {
         console.log("Error fetching tools:", error);
@@ -121,69 +120,74 @@ const Tools = () => {
       <div className="rn-blog-area ptb--120 bg_color--1">
         <div className="container">
           <div className="row mt--30 blog-style--2">
-            {tools.length > 0
-              ? tools.map((value, i) => (
-                  <div
-                    className="col-lg-4 col-md-6 col-sm-6 col-12 mt--30"
-                    key={i}
-                  >
-                    <div className="im_box">
-                      <div className="thumbnail">
-                        <Link
-                          style={{ textDecoration: "none" }}
-                          to={{
-                            pathname: "/tool-details",
-                            state: { data: value },
+            {tools.length > 0 ? (
+              tools.map((value, i) => (
+                <div
+                  className="col-lg-4 col-md-6 col-sm-6 col-12 mt--30"
+                  key={i}
+                >
+                  <div className="im_box">
+                    <div className="thumbnail">
+                      <img
+                        className="w-100"
+                        src={`${baseURL}${value.thumbnail}`}
+                        alt="thumbnail"
+                      />
+                    </div>
+                    <div className="content">
+                      <div className="inner">
+                        <div className="content_heading">
+                          <h4
+                            className="title"
+                            style={{
+                              overflow: "hidden",
+                              textOverflow: "ellipsis",
+                              whiteSpace: "nowrap",
+                            }}
+                          >
+                            {value.title}
+                          </h4>
+                          <p
+                            className="description descriptionTrim"
+                            dangerouslySetInnerHTML={{ __html: value.body }}
+                          ></p>
+                        </div>
+                      </div>
+
+                      {/* Read Article Button */}
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "center",
+                          marginBottom: "10px",
+                        }}
+                      >
+                        <a
+                          href={value.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{
+                            backgroundColor: "#28a745", // Green button color
+                            color: "white",
+                            padding: "10px 20px",
+                            borderRadius: "5px",
+                            textDecoration: "none",
+                            display: "inline-block",
+                            fontSize: "16px", // Adjust font size if needed
+                            transition: "background-color 0.3s",
+                            textAlign: "center",
                           }}
                         >
-                          <img
-                            className="w-100"
-                            src={`${baseURL}${value.thumbnail}`}
-                            alt="thumbnail"
-                          />
-                        </Link>
-                      </div>
-                      <div className="content">
-                        <div className="inner">
-                          <div className="content_heading">
-                            <h4
-                              className="title"
-                              style={{
-                                overflow: "hidden",
-                                textOverflow: "ellipsis",
-                                whiteSpace: "nowrap",
-                              }}
-                            >
-                              <Link
-                                style={{ textDecoration: "none" }}
-                                to={{
-                                  pathname: "/tool-details",
-                                  state: { data: value },
-                                }}
-                              >
-                                {value.title}
-                              </Link>
-                            </h4>
-                            <br />
-                            <p
-                              className="description descriptionTrim"
-                              dangerouslySetInnerHTML={{ __html: value.body }}
-                            ></p>
-                          </div>
-                        </div>
-                        <Link
-                          style={{ textDecoration: "none" }}
-                          className="transparent_link"
-                          to={{
-                            pathname: "/tool-details",
-                            state: { data: value },
-                          }}
-                        ></Link>
+                          Link
+                        </a>
                       </div>
                     </div>
                   </div>
-                ))
-              : <p>No tools found.</p>}
+                </div>
+              ))
+            ) : (
+              <p>No tools found.</p>
+            )}
           </div>
 
           {/* Pagination Controls */}
@@ -213,7 +217,8 @@ const Tools = () => {
                   color: "#000", // Set to black for better visibility
                 }}
               >
-                {currentPage}
+                Page {currentPage} of {totalPages}{" "}
+                {/* Display current page and total pages */}
               </span>
               <button
                 onClick={handleNextPage}
@@ -224,7 +229,8 @@ const Tools = () => {
                   padding: "10px 20px",
                   borderRadius: "5px",
                   opacity: currentPage === totalPages ? 0.5 : 0.7,
-                  cursor: currentPage === totalPages ? "not-allowed" : "pointer",
+                  cursor:
+                    currentPage === totalPages ? "not-allowed" : "pointer",
                   transition: "opacity 0.3s",
                   margin: "0 15px",
                 }}

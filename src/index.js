@@ -134,9 +134,10 @@ class Root extends Component {
             <Route component={error404} />
           </Switch>
         </PageScrollTop>
-        <WhatsAppButton phoneNumber="07062962468" 
-        message="Hello, I have a question!"/>
-
+        <WhatsAppButton
+          phoneNumber="+2347031195688"
+          message="Hello, My name is  "
+        />
       </BrowserRouter>
     );
   }

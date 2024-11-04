@@ -2,8 +2,16 @@ import React, { useState, useEffect, Fragment, useRef } from "react";
 import ModalVideo from "react-modal-video";
 import ScrollToTop from "react-scroll-up";
 import Slider from "react-slick";
-import { Row, Col, Button, Card, Form, Modal } from "react-bootstrap";
-import DOMPurify from 'dompurify';
+import {
+  Row,
+  Col,
+  Container,
+  Button,
+  Card,
+  Form,
+  Modal,
+} from "react-bootstrap";
+import DOMPurify from "dompurify";
 import { Link } from "react-router-dom";
 import { slideSlick } from "../page-demo/script";
 import BlogContent from "../elements/blog/BlogContent";
@@ -115,7 +123,6 @@ const Home = () => {
       ALLOWED_ATTR: ["href", "target"],
     });
   };
-
 
   //console.log(baseURL+videos[0]?.url)
   const AnyReactComponent = ({ userData }) => (
@@ -576,9 +583,6 @@ const Home = () => {
       {/* Start Counterup Area */}
       <div className="counterup-area pt--40 pb--80 theme-text-white">
         <div className="container">
-          <div className="section-title">
-            <h2 className="title">Market Trends</h2>
-          </div>
           <div>
             <CommodityPriceList />
           </div>
@@ -703,219 +707,6 @@ const Home = () => {
           </div>
         </div>
       </div>
-      {/* End  Start Strategic Initiatives */}
-
-      {/* Start Service Area 
-            <div className="service-area ptb--120">
-                <div className="container">
-                    <div className="section-title">
-                        <h2 className="title">Who Can <span className="tertiary-color">Register</span></h2>
-                    </div>
-                    <div className="row service-main-wrapper">
-                        {   categories.length > 0 ?
-                            categories.map( (val , i) => (
-                            <div className="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 justify-center align-items-center" key={i} style={{justifyContent:'center', alignItems:'center'}}>
-                                <div className="service service__style--1 bg-white" style={{justifyContent:'center', alignItems:'center'}}>
-
-                                    <div className="row" style={{width: '90%', justifyContent:'center', alignItems:'center'}}>
-                                        <div className="col-lg-3">
-                                            <img src="/assets/images/icons/caticon.webp" width={50} alt="categories"/>
-                                        </div>
-                                        <h5 className="col-lg-9 text-left"> { val.name}</h5>
-                                    </div>
-                                </div>
-                            </div>
-                        )):null}
-                    </div>
-                </div>
-            </div>
-             End Service Area */}
-
-      {/* Start About Area 
-            <div className="about-area rm-about-style-2 ptb--120 bg_color--5" id="about">
-                <div className="about-wrapper">
-                    <AboutOne />
-                </div>
-            </div>
-             End About Area */}
-
-      {/* Start About Area  
-            <div className="rn-about-area ptb--120 bg_color--5">
-                <div className="container">
-                    <div className="row row--35">
-                        <div className="col-lg-6">
-                            <div className="thumbnail">
-                                <img className="w-100" src="/assets/images/about/about-4.png" alt="About Images"/>
-                            </div>
-                        </div>
-                        <div className="col-lg-6">
-                            <div className="about-inner inner">
-                                <div className="section-title">
-                                    <span className="subtitle">Our Working Plan</span>
-                                    <h2 className="title">Working Process</h2>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Enim exercitationem impedit iure quia quo recusandae?</p>
-                                </div>
-                                <div className="accordion-wrapper mt--30">
-                                    <Accordion01 />
-                                </div>
-                                <div className="about-button mt--30">
-                                    <a className="btn-default" href="/about">See how it works</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            End About Area  */}
-
-      {/* Start Team Area  *
-            <div className="rn-team-area ptb--120 bg_color--1">
-                <div className="container">
-                    <div className="row">
-                        <div className="col-lg-12">
-                            <div className="section-title text-center mb--25 mb_sm--0">
-                                <span className="subtitle">Our Experts</span>
-                                <h2 className="title">Managing Team</h2>
-                                <p>There are many variations of passages of Lorem Ipsum available, <br /> but the majority have suffered alteration.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="row">
-                        <TeamOne column="col-lg-4 col-md-6 col-sm-6 col-12" teamStyle="team-style--bottom" item="3" />
-                    </div>
-                </div>
-            </div>
-            End Team Area  */}
-
-      {/* Start Pricing Tbale Area  *
-            <div className="rn-pricing-table-area ptb--120 bg_color--5">
-                <div className="container">
-                    <div className="row">
-                        <div className="col-lg-12">
-                            <div className="section-title service-style--3 text-center mb--25 mb_sm--0">
-                                <span className="subtitle">Our Budget Plan</span>
-                                <h2 className="title">Pricing Plan</h2>
-                                <p>There are many variations of passages of Lorem Ipsum available, <br /> but the majority have suffered alteration.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="row">
-                         Start PRicing Table Area  
-                        <div className="col-lg-4 col-md-6 col-12 mt--30">
-                            <div className="rn-pricing">
-                                <div className="pricing-table-inner">
-                                    <div className="pricing-header">
-                                        <h4 className="title">Free</h4>
-                                        <div className="pricing">
-                                            <span className="price">$45</span>
-                                            <span className="subtitle">USD Per Month</span>
-                                        </div>
-                                    </div>
-                                    <div className="pricing-body">
-                                        <ul className="list-style--1">
-                                            <li><FiCheck /> 5 PPC Campaigns</li>
-                                            <li><FiCheck /> Digital Marketing</li>
-                                            <li><FiCheck /> Marketing Agency</li>
-                                            <li><FiCheck /> Seo Friendly</li>
-                                            <li><FiCheck /> UI/UX designs</li>
-                                        </ul>
-                                    </div>
-                                    <div className="pricing-footer">
-                                        <a className="rn-btn" href="#pricing">Purchase Now</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                         End PRicing Table Area  */}
-
-      {/* Start PRicing Table Area  
-                        <div className="col-lg-4 col-md-6 col-12 mt--30">
-                            <div className="rn-pricing active">
-                                <div className="pricing-table-inner">
-                                    <div className="pricing-header">
-                                        <h4 className="title">Business</h4>
-                                        <div className="pricing">
-                                            <span className="price">$45</span>
-                                            <span className="subtitle">USD Per Month</span>
-                                        </div>
-                                    </div>
-                                    <div className="pricing-body">
-                                        <ul className="list-style--1">
-                                            <li><FiCheck /> 5 PPC Campaigns</li>
-                                            <li><FiCheck /> Digital Marketing</li>
-                                            <li><FiCheck /> Marketing Agency</li>
-                                            <li><FiCheck /> Seo Friendly</li>
-                                            <li><FiCheck /> UI/UX designs</li>
-                                        </ul>
-                                    </div>
-                                    <div className="pricing-footer">
-                                        <a className="rn-btn" href="#pricing">Purchase Now</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                         End PRicing Table Area  */}
-
-      {/* Start PRicing Table Area  
-                        <div className="col-lg-4 col-md-6 col-12 mt--30">
-                            <div className="rn-pricing">
-                                <div className="pricing-table-inner">
-                                    <div className="pricing-header">
-                                        <h4 className="title">Advanced</h4>
-                                        <div className="pricing">
-                                            <span className="price">$99</span>
-                                            <span className="subtitle">USD Per Month</span>
-                                        </div>
-                                    </div>
-                                    <div className="pricing-body">
-                                        <ul className="list-style--1">
-                                            <li><FiCheck /> 5 PPC Campaigns</li>
-                                            <li><FiCheck /> Digital Marketing</li>
-                                            <li><FiCheck /> Marketing Agency</li>
-                                            <li><FiCheck /> Seo Friendly</li>
-                                            <li><FiCheck /> UI/UX designs</li>
-                                        </ul>
-                                    </div>
-                                    <div className="pricing-footer">
-                                        <a className="rn-btn" href="#pricing">Purchase Now</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                         End PRicing Table Area  
-                    </div>
-                </div>
-            </div>
-             End Pricing Tbale Area  */}
-
-      {/* Start Brand Area  *
-            <div className="rn-brand-area ptb--120 bg_color--1">
-                <div className="container">
-                    <div className="row">
-                        <div className="col-lg-12">
-                            <div className="section-title text-center mb--25 mb_sm--0">
-                                <span className="subtitle">Top clients</span>
-                                <h2 className="title">Clients Say What About Us</h2>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="col-lg-10 offset-lg-1 mt--30">
-                            <div className="thumbnail position-relative">
-                                <img className="w-100" src="/assets/images/about/about-10.png" alt="About Images"/>
-                                <ModalVideo channel='youtube' isOpen={isOpen} videoId='ZOoVOfieAF8' onClose={() => this.setState({isOpen: false})} />
-                                <button className="video-popup position-top-center theme-color" onClick={this.openModal}><span className="play-icon"></span></button>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="row pt--120">
-                        <div className="col-lg-12">
-                            <BrandTwo />
-                        </div>
-                    </div>
-                </div>
-            </div>
-             End Brand Area  */}
 
       {/* Start Blog Area */}
       <div className="rn-blog-area pt--120 pb--80 bg_color--1 ">
@@ -1053,7 +844,7 @@ const Home = () => {
           <div className="row mt--30">
             {/* left div - videos */}
             <div
-              className="col-lg-6 col-md-12 col-sm-12 col-12 mt--40"
+              className="col-lg-5 col-md-12 col-sm-12 col-12 mt--40"
               style={{ zIndex: 1 }}
             >
               {videos.length > 0
@@ -1115,197 +906,150 @@ const Home = () => {
                   ))
                 : null}
             </div>
+
             {/* right div - tools */}
-            <div
-              className="col-lg-6 col-md-12 col-sm-12 col-12 mt--40"
-              style={{ zIndex: 0 }}
-            >
-              {tools.length > 0
-                ? tools.map((value, i) => (
-                    <div key={i}>
-                      <div className="res_box">
-                        <div className="thumbnail">
-                          <a
-                            style={{ textDecoration: "none" }}
-                            href="https://www.iita.org/digital-tools/appdetails?app=Seed_tracker"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            <img
-                              className="w-100"
-                              style={{ height: 150 }}
-                              src={`${baseURL}${value.thumbnail}`}
-                              alt="Blog Images"
-                            />
-                          </a>
-                        </div>
-                        <div className="content">
-                          <div className="inner row">
-                            <div className="content_heading col-lg-9">
-                              <h4
-                                className="title"
-                                style={{
-                                  overflow: "hidden",
-                                  textOverflow: "ellipsis",
-                                  whiteSpace: "nowrap",
-                                }}
-                              >
-                                <Link style={{ textDecoration: "none" }} to="/">
-                                  {value.title}
-                                </Link>
-                              </h4>
-                              <p
-                                className="description descriptionTrimres"
-                                dangerouslySetInnerHTML={{ __html: value.body }}
-                              ></p>
-                            </div>
-
-                            <div className="col-lg-3 col-md-12 col-sm-12 text-white text-center">
-                              <a
-                                style={{ textDecoration: "none" }}
-                                className="btn-default size-sm text-center"
-                                target="_blank"
-                                href="https://www.iita.org/digital-tools"
-                              >
-                                {" "}
-                                See all{" "}
-                              </a>
-                            </div>
+            <div className="col-lg-7 col-md-12 col-sm-12 col-12 mt--40 d-flex">
+              {/* Left Column - Tools */}
+              <div className="col-lg-6 col-md-6 col-sm-12">
+                {tools.length > 0
+                  ? tools.map((value, i) => (
+                      <div key={i}>
+                        <div className="res_box">
+                          <div className="thumbnail">
+                            <a
+                              style={{ textDecoration: "none" }}
+                              href="https://www.iita.org/digital-tools/appdetails?app=Seed_tracker"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              <img
+                                className="w-100"
+                                style={{ height: 150 }}
+                                src={`${baseURL}${value.thumbnail}`}
+                                alt="Blog Images"
+                              />
+                            </a>
                           </div>
-                        </div>
-                      </div>
-                    </div>
-                  ))
-                : null}
-
-              {publications.length > 0
-                ? publications.map((value, i) => (
-                    <div key={i}>
-                      <div className="res_box">
-                        <div className="thumbnail">
-                          <Link
-                            style={{ textDecoration: "none" }}
-                            to={{
-                              pathname: "/publication-details",
-                              state: { data: value },
-                            }}
-                          >
-                            <img
-                              className="w-100"
-                              style={{ height: 150 }}
-                              src={`${baseURL}${value.thumbnail}`}
-                              alt="Blog Images"
-                            />
-                          </Link>
-                        </div>
-                        <div className="content">
-                          <div className="inner row">
-                            <div className="content_heading col-lg-9">
-                              <h4
-                                className="title"
-                                style={{
-                                  overflow: "hidden",
-                                  textOverflow: "ellipsis",
-                                  whiteSpace: "nowrap",
-                                }}
-                              >
-                                <Link
-                                  style={{ textDecoration: "none" }}
-                                  to={{
-                                    pathname: "/publication-details",
-                                    state: { data: value },
+                          <div className="content">
+                            <div className="inner row">
+                              <div className="content_heading col-lg-9">
+                                <h4
+                                  className="title"
+                                  style={{
+                                    overflow: "hidden",
+                                    textOverflow: "ellipsis",
+                                    whiteSpace: "nowrap",
                                   }}
                                 >
-                                  {value.title}
-                                </Link>
-                              </h4>
-                              <p
-                                className="description descriptionTrimres"
-                                dangerouslySetInnerHTML={{ __html: value.body }}
-                              ></p>
-                            </div>
-
-                            <div className="col-lg-3 col-md-12 col-sm-12 text-white text-center">
-                              <Link
-                                to="/publication"
-                                className="btn-default size-sm text-center"
-                                style={{ textDecoration: "none" }}
-                              >
-                                {" "}
-                                See all{" "}
-                              </Link>
+                                  <Link
+                                    style={{ textDecoration: "none" }}
+                                    to="/"
+                                  >
+                                    {value.title}
+                                  </Link>
+                                </h4>
+                                <p
+                                  className="description descriptionTrimres"
+                                  dangerouslySetInnerHTML={{
+                                    __html:
+                                      value.body.length > 100
+                                        ? `${value.body.substring(0, 100)}...`
+                                        : value.body,
+                                  }}
+                                ></p>
+                              </div>
+                              <div className="col-lg-3 col-md-12 text-white text-center">
+                                <a
+                                  style={{ textDecoration: "none" }}
+                                  className="btn-default size-sm text-center"
+                                  target="_blank"
+                                  href="https://www.iita.org/digital-tools"
+                                >
+                                  See all
+                                </a>
+                              </div>
                             </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  ))
-                : null}
+                    ))
+                  : null}
+              </div>
+
+              {/* Right Column - Publications */}
+              <div className="col-lg-6 col-md-6 col-sm-12">
+                {publications.length > 0
+                  ? publications.map((value, i) => (
+                      <div key={i}>
+                        <div className="res_box">
+                          <div className="thumbnail">
+                            <Link
+                              style={{ textDecoration: "none" }}
+                              to={{
+                                pathname: "/publication-details",
+                                state: { data: value },
+                              }}
+                            >
+                              <img
+                                className="w-100"
+                                style={{ height: 150 }}
+                                src={`${baseURL}${value.thumbnail}`}
+                                alt="Blog Images"
+                              />
+                            </Link>
+                          </div>
+                          <div className="content">
+                            <div className="inner row">
+                              <div className="content_heading col-lg-9">
+                                <h4
+                                  className="title"
+                                  style={{
+                                    overflow: "hidden",
+                                    textOverflow: "ellipsis",
+                                    whiteSpace: "nowrap",
+                                  }}
+                                >
+                                  <Link
+                                    style={{ textDecoration: "none" }}
+                                    to={{
+                                      pathname: "/publication-details",
+                                      state: { data: value },
+                                    }}
+                                  >
+                                    {value.title}
+                                  </Link>
+                                </h4>
+                                <p
+                                  className="description descriptionTrimres"
+                                  dangerouslySetInnerHTML={{
+                                    __html:
+                                      value.body.length > 100
+                                        ? `${value.body.substring(0, 100)}...`
+                                        : value.body,
+                                  }}
+                                ></p>
+                              </div>
+                              <div className="col-lg-3 col-md-12 text-white text-center">
+                                <Link
+                                  to="/publication"
+                                  className="btn-default size-sm text-center"
+                                  style={{ textDecoration: "none" }}
+                                >
+                                  See all
+                                </Link>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))
+                  : null}
+              </div>
             </div>
           </div>
         </div>
       </div>
       {/* End RESOURCES Area */}
-
-      {/* <div className="rn-blog-area pt--40 pb--80 ">
-                <div className="container">
-                    <div className="row align-items-end">
-                        <div className="col-lg-12">
-                            <div className="section-title service-style--3">
-                                <h2 className="title">{category? category.replace('_',' ')+'s':''}</h2>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <Row xs="auto" style={{padding:20}}>
-                        <Col>
-                          <Form.Select aria-label="Category" value={category} style={{fontSize: 15}} size="sm" onChange={(e)=>{setCategory(e.target.value); getUsers(page, perPage, e.target.value, lga);}}>
-                            <option value="trader">Traders</option>
-                            <option value="processor">Processors</option>
-                            <option value="off_taker">Off-takers</option>
-                            <option value="transporter">Transporters</option>
-
-                          </Form.Select>
-                        </Col>
-                          
-                        <Col>
-                          <Form.Select aria-label="LGA" size="sm" style={{fontSize: 14}} onChange={(e)=>{setCategory(e.target.value); getUsers(page, perPage, category, e.target.value, );}}>
-                            <option value="">LGA</option>
-                            {
-                              lgas.map((item, i)=>(
-                                <option key={i} value={item}>{item}</option>
-                              ))
-                            }
-                            
-                          </Form.Select>
-                        </Col>
-                        
-                    </Row>
-
-
-                    <div style={{ height: '50vh', width: '100%' }}>
-                      <GoogleMapReact
-                        bootstrapURLKeys={{ key: googlemapsapi}}
-                        defaultCenter={defaultProps.center}
-                        defaultZoom={defaultProps.zoom}
-                      >
-                        {
-                            users.length > 0 ?
-                            users.map((item, i)=>(
-                               <AnyReactComponent
-                                   key={i}
-                                  lat={geoCod(item.geolocation, 0)}
-                                  lng={geoCod(item.geolocation, 1)}
-                                  userData={item}
-                                /> 
-                            )):null
-                        }
-                      </GoogleMapReact>
-                    </div>
-                    
-                </div>
-            </div>*/}
 
       {/* Start Brand Area */}
       <div

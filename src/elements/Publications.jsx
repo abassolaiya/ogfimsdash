@@ -6,6 +6,7 @@ import Header from "../component/header/Header";
 import Footer from "../component/footer/Footer";
 import { baseURL } from "../httpService";
 import { Link } from "react-router-dom";
+import Pagination from "../elements/common/Pagination"; // Import your Pagination component
 
 const Publications = () => {
   const [publications, setPublications] = useState([]);
@@ -14,12 +15,14 @@ const Publications = () => {
   const [totalPages, setTotalPages] = useState(1); // Track total pages
   const [searchTerm, setSearchTerm] = useState(""); // Track search term
   const [filter, setFilter] = useState("all"); // Track selected filter
+  const [isLoading, setIsLoading] = useState(false); // Loading state
 
   useEffect(() => {
     getPublications(currentPage, searchTerm, filter); // Fetch data when the component mounts or the page, searchTerm, or filter changes
   }, [currentPage, searchTerm, filter]);
 
-  const getPublications = (page, searchTerm, filter) => {
+  const getPublications = async (page, searchTerm, filter) => {
+    setIsLoading(true); // Start loading
     const headers = {
       "Content-Type": "application/json",
       Accept: "application/json",
@@ -30,32 +33,19 @@ const Publications = () => {
     if (searchTerm) query += `&search=${searchTerm}`;
     if (filter && filter !== "all") query += `&filter=${filter}`;
 
-    fetch(`${baseURL}publications?${query}`, {
-      method: "GET",
-      headers,
-    })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        setPublications(responseJson.publications); // Set the new publications for the current page
-        setTotalPages(Math.ceil(responseJson.total / publicationsPerPage)); // Update total pages
-      })
-      .catch((error) => {
-        console.log("Error fetching publications:", error);
+    try {
+      const response = await fetch(`${baseURL}publications?${query}`, {
+        method: "GET",
+        headers,
       });
-  };
-
-  // Handle the next and previous buttons
-  const handleNextPage = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage((prevPage) => prevPage + 1);
-      window.scrollTo(0, 0); // Scroll to top
-    }
-  };
-
-  const handlePreviousPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage((prevPage) => prevPage - 1);
-      window.scrollTo(0, 0); // Scroll to top
+      const responseJson = await response.json();
+      console.log(responseJson)
+      setPublications(responseJson.publications); // Set the new publications for the current page
+      setTotalPages(totalPages); // Update total pages
+    } catch (error) {
+      console.log("Error fetching publications:", error);
+    } finally {
+      setIsLoading(false); // Stop loading after the fetch
     }
   };
 
@@ -122,122 +112,83 @@ const Publications = () => {
       <div className="rn-blog-area ptb--120 bg_color--1">
         <div className="container">
           <div className="row mt--30 blog-style--2">
-            {publications.length > 0
-              ? publications.map((value, i) => (
-                  <div
-                    className="col-lg-4 col-md-6 col-sm-6 col-12 mt--30"
-                    key={i}
-                  >
-                    <div className="im_box">
-                      <div className="thumbnail">
-                        <Link
-                          style={{ textDecoration: "none" }}
-                          to={{
-                            pathname: "/publication-details",
-                            state: { data: value },
-                          }}
-                        >
-                          <img
-                            className="w-100"
-                            src={`${baseURL}${value.thumbnail}`}
-                            alt="thumbnail"
-                          />
-                        </Link>
-                      </div>
-                      <div className="content">
-                        <div className="inner">
-                          <div className="content_heading">
-                            <h4
-                              className="title"
-                              style={{
-                                overflow: "hidden",
-                                textOverflow: "ellipsis",
-                                whiteSpace: "nowrap",
+            {isLoading ? (
+              <p>Loading publications...</p>
+            ) : publications.length > 0 ? (
+              publications.map((value, i) => (
+                <div
+                  className="col-lg-4 col-md-6 col-sm-6 col-12 mt--30"
+                  key={i}
+                >
+                  <div className="im_box">
+                    <div className="thumbnail">
+                      <Link
+                        style={{ textDecoration: "none" }}
+                        to={{
+                          pathname: "/publication-details",
+                          state: { data: value },
+                        }}
+                      >
+                        <img
+                          className="w-100"
+                          src={`${baseURL}${value.thumbnail}`}
+                          alt="thumbnail"
+                        />
+                      </Link>
+                    </div>
+                    <div className="content">
+                      <div className="inner">
+                        <div className="content_heading">
+                          <h4
+                            className="title"
+                            style={{
+                              overflow: "hidden",
+                              textOverflow: "ellipsis",
+                              whiteSpace: "nowrap",
+                            }}
+                          >
+                            <Link
+                              style={{ textDecoration: "none" }}
+                              to={{
+                                pathname: "/publication-details",
+                                state: { data: value },
                               }}
                             >
-                              <Link
-                                style={{ textDecoration: "none" }}
-                                to={{
-                                  pathname: "/publication-details",
-                                  state: { data: value },
-                                }}
-                              >
-                                {value.title}
-                              </Link>
-                            </h4>
-                            <br />
-                            <p
-                              className="description descriptionTrim"
-                              dangerouslySetInnerHTML={{ __html: value.body }}
-                            ></p>
-                          </div>
+                              {value.title}
+                            </Link>
+                          </h4>
+                          <br />
+                          <p
+                            className="description descriptionTrim"
+                            dangerouslySetInnerHTML={{ __html: value.body }}
+                          ></p>
                         </div>
-                        <Link
-                          style={{ textDecoration: "none" }}
-                          className="transparent_link"
-                          to={{
-                            pathname: "/publication-details",
-                            state: { data: value },
-                          }}
-                        ></Link>
                       </div>
+                      <Link
+                        style={{ textDecoration: "none" }}
+                        className="transparent_link"
+                        to={{
+                          pathname: "/publication-details",
+                          state: { data: value },
+                        }}
+                      ></Link>
                     </div>
                   </div>
-                ))
-              : <p>No publications found.</p>}
+                </div>
+              ))
+            ) : (
+              <p>No publications found.</p>
+            )}
           </div>
 
-          {/* Pagination Controls */}
-          <div className="row mt--60">
-            <div className="col-lg-12 text-center">
-              <button
-                onClick={handlePreviousPage}
-                disabled={currentPage === 1}
-                style={{
-                  backgroundColor: "#28a745", // Green button color
-                  border: "none",
-                  padding: "10px 20px",
-                  borderRadius: "5px",
-                  opacity: currentPage === 1 ? 0.5 : 0.7,
-                  cursor: currentPage === 1 ? "not-allowed" : "pointer",
-                  transition: "opacity 0.3s",
-                  margin: "0 15px",
-                }}
-                className="faded-btn"
-              >
-                Previous
-              </button>
-              <span
-                style={{
-                  margin: "0 15px",
-                  fontSize: "20px", // Adjust font size
-                  color: "#000", // Set to black for better visibility
-                }}
-              >
-                {currentPage}
-              </span>
-              <button
-                onClick={handleNextPage}
-                disabled={currentPage === totalPages}
-                style={{
-                  backgroundColor: "#28a745", // Green button color
-                  border: "none",
-                  padding: "10px 20px",
-                  borderRadius: "5px",
-                  opacity: currentPage === totalPages ? 0.5 : 0.7,
-                  cursor: currentPage === totalPages ? "not-allowed" : "pointer",
-                  transition: "opacity 0.3s",
-                  margin: "0 15px",
-                }}
-                className="faded-btn"
-              >
-                Next
-              </button>
-            </div>
-          </div>
+          {/* Pagination */}
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={(page) => setCurrentPage(page)}
+          />
         </div>
       </div>
-      {/* End Blog Area */}
 
       {/* Start Back To Top */}
       <div className="backto-top">
