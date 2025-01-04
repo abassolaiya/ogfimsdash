@@ -2,23 +2,25 @@ import React, { useState, useEffect } from "react";
 import PageHelmet from "../component/common/Helmet";
 import Pagination from "../elements/common/Pagination";
 import ScrollToTop from "react-scroll-up";
-import { useParams, useHistory } from "react-router-dom";
-import DOMPurify from 'dompurify';
+import { Link } from "react-router-dom";
+import DOMPurify from "dompurify";
 import { FiChevronUp } from "react-icons/fi";
 import Header from "../component/header/Header";
 import Footer from "../component/footer/Footer";
 import { baseURL } from "../httpService";
-import { Link } from "react-router-dom";
 
 const NewsUpdate = () => {
   const [news, setNews] = useState([]);
-  const history = useHistory();
+  const [isLoading, setIsLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1); // Track current page
+  const [totalPages, setTotalPages] = useState(1); // Track total pages
+  const [totalPosts, setTotalPosts] = useState(0); // Track total posts
+  const [postsPerPage] = useState(10); // Define the number of posts per page
 
+  // Fetch news when page changes or component mounts
   useEffect(() => {
-    if (news.length === 0) {
-      getNews();
-    }
-  }, []);
+    getNews();
+  }, [currentPage]); // Depend on currentPage to trigger effect on page change
 
   const sanitizeHTML = (html) => {
     const unescapedHTML = html
@@ -36,18 +38,28 @@ const NewsUpdate = () => {
       "Content-Type": "application/json",
       Accept: "application/json",
     };
-    fetch(`${baseURL}posts?limit=100&page=1&order=desc`, {
+
+    // Add pagination parameters: limit and page
+    fetch(`${baseURL}posts?limit=${postsPerPage}&page=${currentPage}`, {
       method: "GET",
       headers,
     })
       .then((response) => response.json())
       .then((responseJson) => {
-        //   console.log(responseJson.posts);
         setNews(responseJson.posts);
+        setTotalPages(Math.ceil(responseJson.totalPosts / postsPerPage)); // Calculate total pages
+        setTotalPosts(responseJson.totalPosts); // Set total posts count
+        setIsLoading(false); // Stop loading after data is fetched
       })
       .catch((error) => {
         console.log(error);
+        setIsLoading(false); // Stop loading in case of error
       });
+  };
+
+  // Handle page change
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
   };
 
   return (
@@ -59,8 +71,8 @@ const NewsUpdate = () => {
         colorblack="color--black"
         logoname="logo.png"
       />
-      {/* Start Breadcrump Area */}
 
+      {/* Breadcrumb Area */}
       <div
         className="rn-page-title-area pt--120 pb--190 bg_image bg_image--31"
         data-black-overlay="7"
@@ -70,16 +82,13 @@ const NewsUpdate = () => {
             <div className="col-lg-12">
               <div className="rn-page-title text-center pt--100">
                 <h2 className="title text-white">Updates</h2>
-                <p></p>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* End Breadcrump Area */}
-
-      {/* Start Blog Area */}
+      {/* Blog Area */}
       <div className="rn-blog-area ptb--120 bg_color--1">
         <div className="container">
           <div className="row mt--30 blog-style--2">
@@ -118,9 +127,7 @@ const NewsUpdate = () => {
                             pathname: "/news-details",
                             state: { data: value },
                           }}
-                        >
-                          {" "}
-                        </Link>
+                        ></Link>
                       </div>
                     </div>
                   </div>
@@ -128,27 +135,29 @@ const NewsUpdate = () => {
               : null}
           </div>
 
+          {/* Pagination Area */}
           <div className="row mt--60">
             <div className="col-lg-12">
-              {/* Start Pagination Area */}
-              {/* <Pagination />*/}
-              {/* End Pagination Area */}
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+              />
             </div>
           </div>
         </div>
       </div>
-      {/* End Blog Area */}
 
-      {/* Start Back To Top */}
+      {/* Back to Top */}
       <div className="backto-top">
         <ScrollToTop showUnder={160}>
           <FiChevronUp />
         </ScrollToTop>
       </div>
-      {/* End Back To Top */}
 
       <Footer />
     </React.Fragment>
   );
 };
+
 export default NewsUpdate;

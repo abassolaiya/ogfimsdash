@@ -127,14 +127,13 @@ class HeaderFive extends Component {
                             </Link>
                           </li>
                           <li>
-                            <a
+                            <Link
                               style={{ textDecoration: "none" }}
-                              href="https://www.iita.org/digital-tools"
-                              target="_blank"
+                              to="/tools"
                             >
                               {" "}
                               Digital Tools{" "}
-                            </a>
+                            </Link>
                           </li>
                           <li>
                             <Link

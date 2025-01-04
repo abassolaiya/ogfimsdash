@@ -135,7 +135,7 @@ class Root extends Component {
           </Switch>
         </PageScrollTop>
         <WhatsAppButton
-          phoneNumber="+2347031195688"
+          phoneNumber="+2348165673641"
           message="Hello, My name is  "
         />
       </BrowserRouter>

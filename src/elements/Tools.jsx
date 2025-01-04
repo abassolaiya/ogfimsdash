@@ -14,6 +14,21 @@ const Tools = () => {
   const [searchTerm, setSearchTerm] = useState(""); // Track search term
   const [filter, setFilter] = useState("all"); // Track selected filter
 
+  // Define categories for the dropdown
+  const categories = [
+    "Crops and livestock management",
+    "Market access",
+    "Data collection and analysis",
+    "Communication and extension",
+    "Precision agriculture",
+    "Supply chain and logistics",
+    "Financial and farm management",
+    "Climate-smart agriculture",
+    "Knowledge repositories",
+    "Monitoring and Evaluation",
+    "Training and capacity building",
+  ];
+
   useEffect(() => {
     getTools(currentPage, searchTerm, filter); // Fetch tools whenever currentPage, searchTerm, or filter changes
   }, [currentPage, searchTerm, filter]);
@@ -25,7 +40,7 @@ const Tools = () => {
     };
 
     // Construct the query params
-    let query = `limit=${toolsPerPage}&page=${page}&order=desc`;
+    let query = `limit=${toolsPerPage}&page=${page}`;
     if (searchTerm) query += `&search=${searchTerm}`;
     if (filter && filter !== "all") query += `&category=${filter}`;
 
@@ -99,17 +114,18 @@ const Tools = () => {
             />
           </div>
           <div className="col-lg-6 col-md-6 col-sm-12">
-            {/* Filter Dropdown */}
+            {/* Category Dropdown */}
             <select
               className="form-control"
               value={filter}
               onChange={(e) => setFilter(e.target.value)}
             >
               <option value="all">All Categories</option>
-              <option value="productivity">Productivity</option>
-              <option value="design">Design</option>
-              <option value="development">Development</option>
-              {/* Add more filter options as needed */}
+              {categories.map((category, index) => (
+                <option key={index} value={category}>
+                  {category}
+                </option>
+              ))}
             </select>
           </div>
         </div>
@@ -244,15 +260,13 @@ const Tools = () => {
       </div>
       {/* End Blog Area */}
 
-      {/* Start Back To Top */}
-      <div className="backto-top">
-        <ScrollToTop showUnder={160}>
-          <FiChevronUp />
-        </ScrollToTop>
-      </div>
-      {/* End Back To Top */}
-
       <Footer />
+
+      <ScrollToTop showUnder={160}>
+        <div className="backto-top">
+          <FiChevronUp />
+        </div>
+      </ScrollToTop>
     </React.Fragment>
   );
 };

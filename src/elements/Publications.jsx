@@ -29,7 +29,7 @@ const Publications = () => {
     };
 
     // Construct the query params
-    let query = `limit=${publicationsPerPage}&page=${page}&order=desc`;
+    let query = `limit=${publicationsPerPage}&page=${page}`;
     if (searchTerm) query += `&search=${searchTerm}`;
     if (filter && filter !== "all") query += `&filter=${filter}`;
 
@@ -39,9 +39,9 @@ const Publications = () => {
         headers,
       });
       const responseJson = await response.json();
-      console.log(responseJson)
+      console.log(responseJson);
       setPublications(responseJson.publications); // Set the new publications for the current page
-      setTotalPages(totalPages); // Update total pages
+      setTotalPages(responseJson.totalPages); // Update total pages from response
     } catch (error) {
       console.log("Error fetching publications:", error);
     } finally {
@@ -74,7 +74,6 @@ const Publications = () => {
           </div>
         </div>
       </div>
-
       {/* End Breadcrump Area */}
 
       {/* Start Search and Filter Area */}
@@ -98,10 +97,25 @@ const Publications = () => {
               onChange={(e) => setFilter(e.target.value)}
             >
               <option value="all">All Categories</option>
-              <option value="research">Research</option>
+              <option value="crops">Crops</option>
+              <option value="livestock">Livestock</option>
+              <option value="production-management-practices">
+                Production and Management practices
+              </option>
+              <option value="training-materials">Training materials</option>
+              <option value="technology-innovations">
+                Technology and Innovations
+              </option>
+              <option value="market-economic-information">
+                Market and Economic information
+              </option>
+              <option value="climate-environmental-information">
+                Climate and Environmental information
+              </option>
+              <option value="policy-regulatory-guidelines">
+                Policy and Regulatory Guidelines
+              </option>
               <option value="reports">Reports</option>
-              <option value="articles">Articles</option>
-              {/* Add more filter options as needed */}
             </select>
           </div>
         </div>

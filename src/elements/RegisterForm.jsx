@@ -1416,6 +1416,7 @@ const RegisterForm = () => {
         }
       })
       .catch((error) => {
+        toast.error(error);
         console.log("error => ", error);
       });
   };

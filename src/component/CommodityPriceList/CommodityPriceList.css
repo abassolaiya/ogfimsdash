@@ -6,6 +6,21 @@
   gap: 15px; /* Space between commodity boxes */
 }
 
+.section-title {
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically within its container */
+  margin-bottom: 20px; /* Add spacing below the title */
+  text-align: center; /* Center-align the text */
+}
+
+.title {
+  font-size: 24px; /* Make it larger */
+  font-weight: bold; /* Bold text */
+  color: #333; /* Darker color for contrast */
+  margin: 10; /* Remove default margin */
+}
+
 .commodity-box {
   width: 400px; /* Adjusted width */
   border: 2px solid #67a961;
@@ -41,23 +56,30 @@
 .bottom-section hr {
   border: none;
   border-top: 2px solid rgba(200, 200, 200, 0.7); /* Lighter and more transparent grey */
-  margin: 5px 0; /* Adjusted margin for spacing */
+  margin: 2px 0; /* Adjusted margin for spacing */
 }
 
 .middle-section {
-  border-top: 1px solid #ddd;
+  /* border-top: 1px solid #ddd;
   padding-top: 5px;
   margin-top: 5px;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: flex-start; */
+  border-top: 1px solid #ddd;
+  padding-top: 5px;
+  margin-top: 5px;
 }
 
 .current-price {
-  display: flex;
+  /* display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: 10px; */
+  display: flex;
+  align-items: center; /* Ensure vertical alignment */
+  justify-content: space-between; /* Push the SVG to the right */
+  width: 100%; /* Ensure the content spans the container */
 }
 
 .name {
@@ -68,15 +90,23 @@
 }
 
 .price-container {
-  display: flex;
+  /* display: flex;
   align-items: center;
-  font-size: 20px; /* Adjust for desired size */
+  font-size: 20px;
   font-weight: bold;
   color: black;
-  text-align: left;
+  text-align: left; */
+  display: flex;
+  align-items: center;
+  font-size: 20px; /* Adjust size as needed */
+  font-weight: bold;
 }
 
 .price {
+  /* font-size: 40px;
+  color: black;
+  text-align: left;
+  font-weight: 600; */
   font-size: 40px; /* Larger font size for the price */
   color: black;
   text-align: left;
@@ -121,8 +151,14 @@
   margin-bottom: 5px;
 }
 
+.front-plot {
+  margin-left: auto; /* Push the SVG to the far right */
+  display: flex;
+  align-items: center;
+}
+
 .bottom-section {
-  margin-top: 15px;
+  margin-top: 5px;
 }
 
 .local-gov-prices {
@@ -140,7 +176,7 @@
   padding: 5px;
   border-radius: 3px;
   width: 100px; /* Set width to fit three boxes in a row */
-  height: 80px;
+  height: 100px;
   justify-content: center;
   background: #e5fbe5;
 }

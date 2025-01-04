@@ -85,6 +85,26 @@ const defaultProps = {
   zoom: 9,
 };
 
+const extractYouTubeID = (url) => {
+  // console.log(url);
+  if (!url || typeof url !== "string") {
+    console.error("Invalid URL provided:", url);
+    return null; // Return null if the URL is invalid or not a string
+  }
+
+  // Regular expression to match YouTube video IDs from different URL formats
+  const regExp =
+    /(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+
+  const match = url.match(regExp);
+  if (match && match[1]) {
+    return match[1]; // Return the video ID if found
+  }
+
+  console.error("No valid video ID found in URL:", url);
+  return null; // Return null if no valid ID is found
+};
+
 const Home = () => {
   const [users, setUsers] = useState([]);
   const [banner, setBanner] = useState([]);
@@ -245,7 +265,7 @@ const Home = () => {
       Accept: "application/json",
     };
     // imit=1&page=1&order=desc
-    fetch(`${baseURL}posts?l`, {
+    fetch(`${baseURL}posts?`, {
       method: "GET",
       headers,
     })
@@ -341,8 +361,8 @@ const Home = () => {
       "Content-Type": "application/json",
       Accept: "application/json",
     };
-    fetch(`${baseURL}video?limit=1&page=1&order=desc`, {
-      // fetch(`${baseURL}video`, {
+    // fetch(`${baseURL}video?limit=1&page=1&order=desc`, {
+    fetch(`${baseURL}video`, {
       method: "GET",
       headers,
     })
@@ -847,64 +867,65 @@ const Home = () => {
               className="col-lg-5 col-md-12 col-sm-12 col-12 mt--40"
               style={{ zIndex: 1 }}
             >
-              {videos.length > 0
-                ? videos.slice(-1).map((value, i) => (
-                    <div key={i}>
-                      <div className="im_box">
-                        <div>
-                          <video
-                            ref={videoRef}
+              {videos.slice(0, 1).map((value, i) => {
+                const videoID = extractYouTubeID(value.url);
+                console.log("Extracted YouTube ID:", videoID); // Log for debugging
+
+                return (
+                  <div key={i}>
+                    <div className="im_box">
+                      <div>
+                        {videoID ? (
+                          <iframe
                             className="w-100"
-                            height={"h-100"}
-                            controls
-                            poster={`${baseURL}${value.thumbnail}`}
-                            onLoad={handlePosterLoad}
-                          >
-                            <source src={`${baseURL}${value.url}`} />
-                          </video>
-                          {/* <iframe
-                            width="853"
-                            height="480"
-                            src={`https://www.youtube.com/embed/${value.embedId}`}
+                            height="300" // Adjust as needed
+                            src={`https://www.youtube.com/embed/${videoID}`}
+                            title={value.title}
                             frameBorder="0"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                             allowFullScreen
-                            title="Embedded youtube"
-                          /> */}
-                        </div>
+                          ></iframe>
+                        ) : (
+                          <div className="error-message">
+                            <p>Error: Invalid YouTube URL</p>
+                          </div>
+                        )}
+                      </div>
 
-                        <div className="content">
-                          <div className="inner">
-                            <div className="content_heading">
-                              <h4 className="title descriptionTrim">
-                                <Link style={{ textDecoration: "none" }} to="/">
-                                  {value.title}
-                                </Link>
-                              </h4>
-                              <br />
-                              <div className="row">
-                                <p className="description descriptionTrim col-lg-8 col-md-12 col-sm-12 col-12">
-                                  {value.body}
-                                </p>
+                      <div className="content">
+                        <div className="inner">
+                          <div className="content_heading">
+                            <h4 className="title descriptionTrim">
+                              <Link
+                                style={{ textDecoration: "none" }}
+                                to="/videos"
+                              >
+                                {value.title}
+                              </Link>
+                            </h4>
+                            <br />
+                            <div className="row">
+                              <p className="description descriptionTrim col-lg-8 col-md-12 col-sm-12 col-12">
+                                {value.body}
+                              </p>
 
-                                <div className="col-lg-4 col-md-12 col-sm-12 col-12 text-white text-center">
-                                  <a
-                                    style={{ textDecoration: "none" }}
-                                    href="/videos"
-                                    className="btn-default size-sm text-center"
-                                  >
-                                    More Videos
-                                  </a>
-                                </div>
+                              <div className="col-lg-4 col-md-12 col-sm-12 col-12 text-white text-center">
+                                <a
+                                  style={{ textDecoration: "none" }}
+                                  href="/videos"
+                                  className="btn-default size-sm text-center"
+                                >
+                                  More Videos
+                                </a>
                               </div>
                             </div>
                           </div>
-                          {/*<Link className="transparent_link" to="/"></Link>*/}
                         </div>
                       </div>
                     </div>
-                  ))
-                : null}
+                  </div>
+                );
+              })}
             </div>
 
             {/* right div - tools */}
@@ -912,138 +933,181 @@ const Home = () => {
               {/* Left Column - Tools */}
               <div className="col-lg-6 col-md-6 col-sm-12">
                 {tools.length > 0
-                  ? tools.map((value, i) => (
-                      <div key={i}>
-                        <div className="res_box">
-                          <div className="thumbnail">
-                            <a
-                              style={{ textDecoration: "none" }}
-                              href="https://www.iita.org/digital-tools/appdetails?app=Seed_tracker"
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              <img
-                                className="w-100"
-                                style={{ height: 150 }}
-                                src={`${baseURL}${value.thumbnail}`}
-                                alt="Blog Images"
-                              />
-                            </a>
-                          </div>
-                          <div className="content">
-                            <div className="inner row">
-                              <div className="content_heading col-lg-9">
-                                <h4
-                                  className="title"
-                                  style={{
-                                    overflow: "hidden",
-                                    textOverflow: "ellipsis",
-                                    whiteSpace: "nowrap",
-                                  }}
-                                >
-                                  <Link
-                                    style={{ textDecoration: "none" }}
-                                    to="/"
+                  ? tools.slice(0, 2).map(
+                      (
+                        value,
+                        i // Slice the array to get only the first 2 items
+                      ) => (
+                        <div key={i}>
+                          <div className="res_box">
+                            <div className="thumbnail">
+                              <a
+                                style={{ textDecoration: "none" }}
+                                href="https://www.iita.org/digital-tools/appdetails?app=Seed_tracker"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                <img
+                                  className="w-100"
+                                  style={{ height: 150 }}
+                                  src={`${baseURL}${value.thumbnail}`}
+                                  alt="Blog Images"
+                                />
+                              </a>
+                            </div>
+                            <div className="content">
+                              <div className="inner row">
+                                <div className="content_heading col-lg-9">
+                                  <p
+                                    style={{
+                                      display: "-webkit-box",
+                                      overflow: "hidden",
+                                      textOverflow: "ellipsis",
+                                      WebkitBoxOrient: "vertical",
+                                      WebkitLineClamp: 3,
+                                      fontSize: "20px", // Adjust the font size to make it smaller
+                                      lineHeight: "1.2em", // Fine-tune the line spacing for better readability
+                                    }}
                                   >
-                                    {value.title}
-                                  </Link>
-                                </h4>
-                                <p
-                                  className="description descriptionTrimres"
-                                  dangerouslySetInnerHTML={{
-                                    __html:
-                                      value.body.length > 100
-                                        ? `${value.body.substring(0, 100)}...`
-                                        : value.body,
-                                  }}
-                                ></p>
-                              </div>
-                              <div className="col-lg-3 col-md-12 text-white text-center">
-                                <a
-                                  style={{ textDecoration: "none" }}
-                                  className="btn-default size-sm text-center"
-                                  target="_blank"
-                                  href="https://www.iita.org/digital-tools"
-                                >
-                                  See all
-                                </a>
+                                    <a
+                                      style={{
+                                        textDecoration: "none",
+                                        color: "inherit",
+                                      }}
+                                      href={value.url}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                    >
+                                      {value.title}
+                                    </a>
+                                  </p>
+
+                                  {/* <p
+                                    className="description descriptionTrimres"
+                                    dangerouslySetInnerHTML={{
+                                      __html:
+                                        value.body.length > 100
+                                          ? `${value.body.substring(0, 100)}...`
+                                          : value.body,
+                                    }}
+                                  ></p> */}
+                                </div>
                               </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    ))
+                      )
+                    )
                   : null}
+                <div className="col-lg-3 col-md-12 text-white text-center">
+                  <Link
+                    to="/tools"
+                    className="btn-default size-sm text-center"
+                    style={{ textDecoration: "none" }}
+                  >
+                    See all
+                  </Link>
+                </div>
               </div>
 
               {/* Right Column - Publications */}
               <div className="col-lg-6 col-md-6 col-sm-12">
                 {publications.length > 0
-                  ? publications.map((value, i) => (
-                      <div key={i}>
-                        <div className="res_box">
-                          <div className="thumbnail">
-                            <Link
-                              style={{ textDecoration: "none" }}
-                              to={{
-                                pathname: "/publication-details",
-                                state: { data: value },
-                              }}
-                            >
-                              <img
-                                className="w-100"
-                                style={{ height: 150 }}
-                                src={`${baseURL}${value.thumbnail}`}
-                                alt="Blog Images"
-                              />
-                            </Link>
-                          </div>
-                          <div className="content">
-                            <div className="inner row">
-                              <div className="content_heading col-lg-9">
-                                <h4
-                                  className="title"
-                                  style={{
-                                    overflow: "hidden",
-                                    textOverflow: "ellipsis",
-                                    whiteSpace: "nowrap",
-                                  }}
-                                >
-                                  <Link
-                                    style={{ textDecoration: "none" }}
-                                    to={{
-                                      pathname: "/publication-details",
-                                      state: { data: value },
+                  ? publications.slice(0, 2).map(
+                      (
+                        value,
+                        i // Slicing to get only the first 2 items
+                      ) => (
+                        <div key={i}>
+                          <div className="res_box">
+                            <div className="thumbnail">
+                              <Link
+                                style={{ textDecoration: "none" }}
+                                to={{
+                                  pathname: "/publication-details",
+                                  state: { data: value },
+                                }}
+                              >
+                                <img
+                                  className="w-100"
+                                  style={{ height: 150 }}
+                                  src={`${baseURL}${value.thumbnail}`}
+                                  alt="Blog Images"
+                                />
+                              </Link>
+                            </div>
+                            <div className="content">
+                              <div className="inner row">
+                                <div className="content_heading col-lg-9">
+                                  <p
+                                    style={{
+                                      display: "-webkit-box",
+                                      overflow: "hidden",
+                                      textOverflow: "ellipsis",
+                                      WebkitBoxOrient: "vertical",
+                                      WebkitLineClamp: 3,
+                                      fontSize: "20px", // Adjust the font size to make it smaller
+                                      lineHeight: "1.2em", // Fine-tune the line spacing for better readability
                                     }}
                                   >
-                                    {value.title}
-                                  </Link>
-                                </h4>
-                                <p
-                                  className="description descriptionTrimres"
-                                  dangerouslySetInnerHTML={{
-                                    __html:
-                                      value.body.length > 100
-                                        ? `${value.body.substring(0, 100)}...`
-                                        : value.body,
-                                  }}
-                                ></p>
-                              </div>
-                              <div className="col-lg-3 col-md-12 text-white text-center">
-                                <Link
-                                  to="/publication"
-                                  className="btn-default size-sm text-center"
-                                  style={{ textDecoration: "none" }}
-                                >
-                                  See all
-                                </Link>
+                                    <Link
+                                      style={{
+                                        textDecoration: "none",
+                                        color: "inherit",
+                                      }}
+                                      to={{
+                                        pathname: "/publication-details",
+                                        state: { data: value },
+                                      }}
+                                    >
+                                      {value.title}
+                                    </Link>
+                                  </p>
+                                  {/* <div className="content_heading col-lg-9">
+                                  <h4
+                                    className="title"
+                                    style={{
+                                      overflow: "hidden",
+                                      textOverflow: "ellipsis",
+                                      whiteSpace: "nowrap",
+                                    }}
+                                  >
+                                    <Link
+                                      style={{ textDecoration: "none" }}
+                                      to={{
+                                        pathname: "/publication-details",
+                                        state: { data: value },
+                                      }}
+                                    >
+                                      {value.title}
+                                    </Link>
+                                  </h4> */}
+                                  {/* <p
+                                    className="description descriptionTrimres"
+                                    dangerouslySetInnerHTML={{
+                                      __html:
+                                        value.body.length > 100
+                                          ? `${value.body.substring(0, 100)}...`
+                                          : value.body,
+                                    }}
+                                  ></p> */}
+                                </div>
                               </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    ))
+                      )
+                    )
                   : null}
+                <div className="col-lg-3 col-md-12 text-white text-center">
+                  <Link
+                    to="/publication"
+                    className="btn-default size-sm text-center"
+                    style={{ textDecoration: "none" }}
+                  >
+                    See all
+                  </Link>
+                </div>
               </div>
             </div>
           </div>

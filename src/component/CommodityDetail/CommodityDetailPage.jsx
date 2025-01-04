@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   LineChart,
   Line,
@@ -12,45 +12,41 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { Table, Dropdown } from "react-bootstrap";
+import { useParams } from "react-router-dom"; // Import the hook
 import "./CommodityDetailPage.css";
-
-const dummyCommodityData = {
-  name: "Maize",
-  averagePrice: 250,
-  prices: [
-    {
-      lga: "Ijebu_North",
-      price: 240,
-      scale: "Kg",
-      trend: "up",
-    },
-    {
-      lga: "Abeokuta_South",
-      price: 260,
-      scale: "Kg",
-      trend: "down",
-    },
-    {
-      lga: "Remo_North",
-      price: 255,
-      scale: "Kg",
-      trend: "up",
-    },
-  ],
-  plotData: [
-    { month: "Jan", price: 230 },
-    { month: "Feb", price: 240 },
-    { month: "Mar", price: 250 },
-    { month: "Apr", price: 245 },
-    { month: "May", price: 255 },
-    { month: "Jun", price: 250 },
-  ],
-};
+import { baseURL } from "../../httpService";
 
 const CommodityDetailPage = () => {
+  const { id } = useParams(); // Use useParams to get the 'id' from the URL
+  const [commodityData, setCommodityData] = useState(null);
   const [plotType, setPlotType] = useState("line");
 
-  const { name, averagePrice, prices, plotData } = dummyCommodityData;
+  // Fetch commodity data from the backend
+  useEffect(() => {
+    const fetchCommodityData = async () => {
+      try {
+        console.log("Fetching data for commodity ID:", id);
+        const response = await fetch(`${baseURL}commodity-prices/${id}`);
+        const data = await response.json(); // Convert response to JSON
+
+        if (data) {
+          setCommodityData(data); // Set data if valid
+        } else {
+          console.error("Invalid data structure:", data);
+        }
+      } catch (error) {
+        console.error("Error fetching commodity data:", error);
+      }
+    };
+
+    fetchCommodityData();
+  }, [id]);
+
+  if (!commodityData) {
+    return <div>Loading...</div>;
+  }
+
+  const { name, averagePrice, prices, plotData } = commodityData;
 
   const renderPlot = () => {
     switch (plotType) {
@@ -154,7 +150,6 @@ const CommodityDetailPage = () => {
         <div className="plot-container">{renderPlot()}</div>
       </div>
 
-      {/* <h2>Price Details by LGA</h2> */}
       <Table striped bordered hover>
         <thead>
           <tr>
@@ -169,7 +164,7 @@ const CommodityDetailPage = () => {
               <td>{priceEntry.lga}</td>
               <td>{priceEntry.scale}</td>
               <td>
-                ${priceEntry.price}{" "}
+                ₦{priceEntry.price}{" "}
                 <span className={`trend-icon ${priceEntry.trend}`}>
                   {priceEntry.trend === "up" ? "▲" : "▼"}
                 </span>

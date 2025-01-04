@@ -33,7 +33,7 @@ const Videos = () => {
       Accept: "application/json",
     };
     try {
-      const response = await fetch(`${baseURL}video?limit=10&page=${page}&order=desc`, {
+      const response = await fetch(`${baseURL}video?`, {
         method: "GET",
         headers,
       });
